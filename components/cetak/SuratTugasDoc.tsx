@@ -32,7 +32,6 @@ export function SuratTugasDoc({ detail }: SuratTugasDocProps) {
 
   const pengukuran = detail.pengukuran ?? [];
   const firstDate = pengukuran.length > 0 ? pengukuran[0].tanggal_pengukuran : null;
-  const lastDate = pengukuran.length > 0 ? pengukuran[pengukuran.length - 1].tanggal_pengukuran : null;
 
   return (
     <div className="flex flex-col">
@@ -153,7 +152,7 @@ export function SuratTugasDoc({ detail }: SuratTugasDocProps) {
                 <tr>
                   <td className="pr-2 text-navy-800">b. Sampai Tanggal</td>
                   <td className="pr-1">:</td>
-                  <td>{lastDate ? formatDate(lastDate) : "–"}</td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>
