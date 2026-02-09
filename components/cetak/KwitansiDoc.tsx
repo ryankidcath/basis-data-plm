@@ -75,15 +75,11 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
             <div className="mt-2 space-y-1 text-sm">
               <div className="flex gap-2 justify-end">
                 <span className="text-navy-700">No. Kwitansi</span>
-                <span className="min-w-[140px] border-b border-navy-400 border-dotted">
-                  {keu?.no_kwitansi || "–"}
-                </span>
+                <span>{keu?.no_kwitansi || "–"}</span>
               </div>
               <div className="flex gap-2 justify-end">
                 <span className="text-navy-700">No. Invoice</span>
-                <span className="min-w-[140px] border-b border-navy-400 border-dotted">
-                  {keu?.no_invoice || "–"}
-                </span>
+                <span>{keu?.no_invoice || "–"}</span>
               </div>
             </div>
           )}
@@ -128,7 +124,7 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
                 <p className="text-navy-800">
                   {formatDateLong(keu?.tanggal_kwitansi)}
                 </p>
-                <p className="mt-16 font-semibold text-navy-900">
+                <p className="mt-0 font-semibold text-navy-900">
                   {INVOICE_INFO_PERUSAHAAN.nama}
                 </p>
                 <div className="mt-16">
