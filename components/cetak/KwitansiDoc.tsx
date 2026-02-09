@@ -22,13 +22,15 @@ function LabelValueRow({
   underline?: boolean;
 }) {
   return (
-    <div className="flex gap-2 text-sm">
-      <span className="shrink-0 text-navy-700">{label}</span>
+    <div className="flex text-sm">
+      <span className="w-40 shrink-0 text-navy-700">
+        {label}
+      </span>
       <span
         className={
           underline
-            ? "min-w-[200px] flex-1 border-b border-navy-800 border-dotted"
-            : "flex-1"
+            ? "min-w-0 flex-1 border-b border-navy-800 border-dotted"
+            : "min-w-0 flex-1"
         }
       >
         {value}
@@ -49,22 +51,19 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-end justify-between gap-6">
-        <div className="flex shrink-0 flex-col">
-          <img
-            src="/logo.png"
-            alt=""
-            className="h-24 w-auto object-contain object-left-bottom"
-            width={200}
-            height={96}
-          />
-          <p className="mt-2 text-xs font-semibold uppercase text-navy-600">
-            Info Perusahaan
-          </p>
-          <p className="mt-0.5 text-sm font-semibold text-navy-900">
+      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-6">
+        <img
+          src="/logo.png"
+          alt=""
+          className="h-24 w-auto object-contain"
+          width={200}
+          height={96}
+        />
+        <div className="text-sm">
+          <p className="font-semibold text-navy-900">
             {INVOICE_INFO_PERUSAHAAN.nama}
           </p>
-          <p className="mt-0.5 text-sm text-navy-700">
+          <p className="mt-0.5 text-navy-700">
             {INVOICE_INFO_PERUSAHAAN.alamat}
           </p>
         </div>
