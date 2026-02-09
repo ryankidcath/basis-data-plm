@@ -1,8 +1,14 @@
 "use client";
 
 import type { PermohonanDetail } from "@/lib/types";
-import { formatDate, formatNumber } from "@/lib/format";
-import { KopSurat } from "./KopSurat";
+import { formatDateShort, formatNumber } from "@/lib/format";
+import { PENGGUNAAN_TANAH_1_LABELS } from "@/lib/format";
+import {
+  INVOICE_INFO_PERUSAHAAN,
+  INVOICE_KETERANGAN_PEMBAYARAN,
+  INVOICE_TAGIHAN_ROLE,
+  INVOICE_PETUGAS_LOKET_NAMA,
+} from "./constants";
 
 interface InvoiceDocProps {
   detail: PermohonanDetail | null;
@@ -12,57 +18,172 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
   if (!detail) {
     return <p className="text-navy-600">Data belum tersedia.</p>;
   }
-  const keu = detail.keuangan;
-  const hasData = keu?.no_invoice ?? keu?.tanggal_invoice;
-  if (!hasData) {
-    return (
-      <div>
-        <KopSurat />
-        <p className="text-navy-600">Data invoice untuk permohonan ini belum diisi. Isi di tab Keuangan.</p>
-      </div>
-    );
-  }
 
-  const amount = keu?.biaya_pengukuran ?? 0;
+  const keu = detail.keuangan;
+  const infoSpasial = detail.informasi_spasial;
+  const hasData = keu?.no_invoice ?? keu?.tanggal_invoice;
+
+  const tagihanNama = detail.klien?.nama ?? detail.pemohon?.nama ?? "–";
+  const penggunaanLabel = detail.penggunaan_tanah_1
+    ? PENGGUNAAN_TANAH_1_LABELS[detail.penggunaan_tanah_1] ?? detail.penggunaan_tanah_1
+    : "–";
+
+  const barisSpasial =
+    infoSpasial && (infoSpasial.biaya ?? 0) > 0
+      ? { produk: "Informasi Data Spasial Pertanahan", jenis: "–", volume: "1 Berkas", jumlah: infoSpasial.biaya }
+      : null;
+  const barisPengukuran =
+    keu != null
+      ? {
+          produk: "Pengukuran Kadastral dan Pembuatan Peta Bidang Tanah",
+          jenis: penggunaanLabel,
+          volume: `${detail.luas_permohonan ?? 0} m²`,
+          jumlah: keu.biaya_pengukuran ?? 0,
+        }
+      : null;
+
+  const total =
+    (barisSpasial?.jumlah ?? 0) + (barisPengukuran?.jumlah ?? 0);
+  const barisList = [barisSpasial, barisPengukuran].filter(Boolean) as {
+    produk: string;
+    jenis: string;
+    volume: string;
+    jumlah: number;
+  }[];
 
   return (
-    <div className="space-y-4">
-      <KopSurat />
-      <h2 className="text-center text-base font-semibold uppercase tracking-wide text-navy-900">
-        Invoice
-      </h2>
-      <div className="flex justify-between text-sm">
-        <span>No. {keu?.no_invoice || "–"}</span>
-        <span>Tanggal: {formatDate(keu?.tanggal_invoice)}</span>
+    <div className="space-y-6">
+      <div className="flex justify-between gap-6">
+        <div className="flex flex-col">
+          <img
+            src="/logo.png"
+            alt=""
+            className="h-14 w-auto object-contain"
+            width={140}
+            height={56}
+          />
+          <p className="mt-2 text-xs font-semibold uppercase text-navy-600">
+            Info Perusahaan
+          </p>
+          <p className="mt-0.5 text-sm font-semibold text-navy-900">
+            {INVOICE_INFO_PERUSAHAAN.nama}
+          </p>
+          <p className="mt-0.5 text-sm text-navy-700">
+            {INVOICE_INFO_PERUSAHAAN.alamat}
+          </p>
+        </div>
+        <div className="text-right">
+          <h2 className="text-lg font-bold uppercase tracking-wide text-navy-900">
+            Invoice
+          </h2>
+          {hasData ? (
+            <>
+              <p className="mt-2 text-sm text-navy-800">
+                <span className="text-navy-600">Nomor</span>{" "}
+                {keu?.no_invoice || "–"}
+              </p>
+              <p className="mt-0.5 text-sm text-navy-800">
+                <span className="text-navy-600">Tanggal</span>{" "}
+                {formatDateShort(keu?.tanggal_invoice)}
+              </p>
+            </>
+          ) : (
+            <p className="mt-2 text-sm text-navy-600">
+              Data invoice belum diisi.
+            </p>
+          )}
+        </div>
       </div>
-      <div className="text-sm text-navy-800">
-        <p className="mb-2">Kepada: {detail.pemohon?.nama || "–"}</p>
-        {detail.klien && <p className="mb-2">Klien: {detail.klien.nama}</p>}
-        <p className="mb-2">Kode KJSB: {detail.kode_kjsb}</p>
+
+      <div className="flex justify-end">
+        <div className="text-right text-sm">
+          <p className="font-semibold text-navy-700">Tagihan Untuk</p>
+          <p className="text-navy-800">{INVOICE_TAGIHAN_ROLE}</p>
+          <p className="font-medium text-navy-900">{tagihanNama}</p>
+        </div>
       </div>
-      <table className="w-full text-sm border border-navy-300">
-        <thead>
-          <tr className="bg-navy-100">
-            <th className="border border-navy-300 px-2 py-2 text-left">No</th>
-            <th className="border border-navy-300 px-2 py-2 text-left">Uraian</th>
-            <th className="border border-navy-300 px-2 py-2 text-right">Jumlah (Rp)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border border-navy-300 px-2 py-2">1</td>
-            <td className="border border-navy-300 px-2 py-2">Jasa pengukuran tanah / PLM</td>
-            <td className="border border-navy-300 px-2 py-2 text-right">{formatNumber(amount)}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="flex justify-end text-sm font-medium">
-        Total: Rp {formatNumber(amount)}
-      </div>
-      <div className="mt-8 flex justify-end">
+
+      {!hasData ? (
+        <p className="text-sm text-navy-600">
+          Data invoice untuk permohonan ini belum diisi. Isi di tab Keuangan.
+        </p>
+      ) : (
+        <>
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-amber-900 text-white">
+                <th className="border border-amber-800 px-2 py-2 text-left font-medium">
+                  Produk
+                </th>
+                <th className="border border-amber-800 px-2 py-2 text-left font-medium">
+                  Jenis Properti
+                </th>
+                <th className="border border-amber-800 px-2 py-2 text-left font-medium">
+                  Volume
+                </th>
+                <th className="border border-amber-800 px-2 py-2 text-right font-medium">
+                  Harga Satuan
+                </th>
+                <th className="border border-amber-800 px-2 py-2 text-right font-medium">
+                  Jumlah Harga
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {barisList.map((baris, idx) => (
+                <tr key={idx} className="text-navy-800">
+                  <td className="border border-navy-300 px-2 py-2">
+                    {baris.produk}
+                  </td>
+                  <td className="border border-navy-300 px-2 py-2">
+                    {baris.jenis}
+                  </td>
+                  <td className="border border-navy-300 px-2 py-2">
+                    {baris.volume}
+                  </td>
+                  <td className="border border-navy-300 px-2 py-2 text-right">
+                    Rp {formatNumber(baris.jumlah)}
+                  </td>
+                  <td className="border border-navy-300 px-2 py-2 text-right">
+                    Rp {formatNumber(baris.jumlah)}
+                  </td>
+                </tr>
+              ))}
+              <tr className="font-medium text-navy-900">
+                <td
+                  className="border border-navy-300 px-2 py-2"
+                  colSpan={3}
+                />
+                <td className="border border-navy-300 px-2 py-2 text-right">
+                  Total
+                </td>
+                <td className="border border-navy-300 px-2 py-2 text-right">
+                  Rp {formatNumber(total)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="mt-4">
+            <p className="text-xs font-semibold uppercase text-navy-600">
+              Keterangan
+            </p>
+            <p className="mt-0.5 text-sm text-navy-800">
+              {INVOICE_KETERANGAN_PEMBAYARAN}
+            </p>
+          </div>
+        </>
+      )}
+
+      <div className="mt-10 flex justify-end">
         <div className="text-center">
-          <div className="h-16" />
-          <p className="text-sm font-medium text-navy-900">KJSB Benning dan Rekan</p>
+          <p className="text-sm font-medium text-navy-800">
+            Petugas Loket
+          </p>
+          <div className="mt-12 h-0 w-40 border-b border-navy-800" />
+          <p className="mt-1 text-sm text-navy-900">
+            {INVOICE_PETUGAS_LOKET_NAMA || "–"}
+          </p>
         </div>
       </div>
     </div>

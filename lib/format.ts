@@ -51,6 +51,20 @@ export function formatDate(s: string | null | undefined): string {
   }
 }
 
+/** Format date short for invoice: DD/MM/YY (id-ID). */
+export function formatDateShort(s: string | null | undefined): string {
+  if (!s) return "–";
+  try {
+    return new Date(s).toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
+  } catch {
+    return s;
+  }
+}
+
 /** Format date long: "8 Februari 2026" (id-ID). */
 export function formatDateLong(s: string | null | undefined): string {
   if (!s) return "–";
