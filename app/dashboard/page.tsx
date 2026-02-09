@@ -34,17 +34,18 @@ export default function DashboardPage() {
     }
     let cancelled = false;
     const supabase = createClient();
-    supabase
-      .from("permohonan")
-      .select("kode_kjsb")
-      .eq("id", selectedPermohonanId)
-      .single()
-      .then(({ data }) => {
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("permohonan")
+          .select("kode_kjsb")
+          .eq("id", selectedPermohonanId)
+          .single();
         if (!cancelled && data) setSelectedPermohonanLabel((data as { kode_kjsb: string }).kode_kjsb);
-      })
-      .catch(() => {
+      } catch {
         if (!cancelled) setSelectedPermohonanLabel(null);
-      });
+      }
+    })();
     return () => { cancelled = true; };
   }, [selectedPermohonanId]);
 
