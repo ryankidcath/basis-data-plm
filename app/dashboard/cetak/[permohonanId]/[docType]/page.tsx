@@ -149,7 +149,7 @@ export default function CetakPage() {
         </div>
       </div>
       <div className="p-6 print:p-0">
-        <div className="max-w-[180mm] mx-auto bg-white shadow print:shadow-none rounded-lg print:rounded-none px-14 py-8 print:px-10 print:py-6">
+        <div className="max-w-[180mm] mx-auto bg-white shadow print:shadow-none rounded-lg print:rounded-none px-6 py-8 print:px-5 print:py-6">
           {renderDoc()}
         </div>
       </div>

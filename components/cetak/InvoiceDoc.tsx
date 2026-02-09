@@ -87,8 +87,8 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
         </div>
       </div>
 
-      <div className="flex items-start justify-between gap-6">
-        <div className="text-left text-sm">
+      <div className="flex items-start justify-between gap-4">
+        <div className="max-w-[38%] shrink-0 text-left text-sm">
           <p className="text-xs font-semibold uppercase text-navy-600">
             Info Perusahaan
           </p>
@@ -99,7 +99,7 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
             {INVOICE_INFO_PERUSAHAAN.alamat}
           </p>
         </div>
-        <div className="text-right text-sm">
+        <div className="min-w-0 flex-1 text-right text-sm">
           <p className="text-xs font-semibold uppercase text-navy-600">
             Tagihan Untuk
           </p>
@@ -115,7 +115,10 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
         <>
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-[#A51A25] text-white">
+              <tr
+                className="bg-[#A51A25] text-white print:bg-[#A51A25]"
+                style={{ printColorAdjust: "exact", WebkitPrintColorAdjust: "exact" } as React.CSSProperties}
+              >
                 <th className="border border-[#8B1620] px-2 py-2 text-left font-medium">
                   Produk
                 </th>
@@ -146,10 +149,10 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
                     {baris.volume}
                   </td>
                   <td className="border border-navy-300 px-2 py-2 text-right">
-                    Rp {formatNumber(baris.jumlah)}
+                    {formatNumber(baris.jumlah)}
                   </td>
                   <td className="border border-navy-300 px-2 py-2 text-right">
-                    Rp {formatNumber(baris.jumlah)}
+                    {formatNumber(baris.jumlah)}
                   </td>
                 </tr>
               ))}
@@ -162,7 +165,7 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
                   Total
                 </td>
                 <td className="border border-navy-300 px-2 py-2 text-right">
-                  Rp {formatNumber(total)}
+                  {formatNumber(total)}
                 </td>
               </tr>
             </tbody>
