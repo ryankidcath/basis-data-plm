@@ -187,8 +187,8 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
           <p className="text-sm font-medium text-navy-800">
             Petugas Loket
           </p>
-          <div className="mt-12 h-0 w-40 border-b border-navy-800" />
-          <p className="mt-1 text-sm text-navy-900">
+          <div className="mt-16" />
+          <p className="text-sm text-navy-900">
             {INVOICE_PETUGAS_LOKET_NAMA}
           </p>
         </div>
