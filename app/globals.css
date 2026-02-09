@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground: #171717;
+  --background: #fafafa;
+  --navy: #171717;
+  --gold: #dc2626;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "kern" 1;
+}
+
+/* Focus ring for accessibility */
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Font Agency FB for letterhead and footer (fallback sans-serif if not installed) */
+.font-agency {
+  font-family: "Agency FB", "Agency FB Bold", sans-serif;
+}
+
+/* Leaflet map container fix for Next.js */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Print: hide toolbar and non-document UI on cetak pages */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
