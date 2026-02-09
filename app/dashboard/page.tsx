@@ -190,10 +190,7 @@ export default function DashboardPage() {
                 )}
                 <WorkflowForms
                   permohonanId={selectedPermohonanId}
-                  onSaved={() => {
-                    setRefreshCount((c) => c + 1);
-                    if (viewMode === "lihat") handleDetailRefresh();
-                  }}
+                  onSaved={() => setRefreshCount((c) => c + 1)}
                   onPermohonanCreated={handlePermohonanCreated}
                   refreshCount={refreshCount}
                 />
