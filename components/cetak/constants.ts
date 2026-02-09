@@ -30,3 +30,6 @@ export const INVOICE_KETERANGAN_PEMBAYARAN =
 
 /** Nama Petugas Loket untuk tanda tangan invoice. */
 export const INVOICE_PETUGAS_LOKET_NAMA = "Lulu Unnisa";
+
+/** Teks untuk "Untuk pembayaran" di kwitansi. */
+export const KWITANSI_UNTUK_PEMBAYARAN = "Pengukuran dan Pembuatan Peta Bidang Tanah";

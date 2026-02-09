@@ -41,6 +41,51 @@ export function formatIntegerForInput(value: number): string {
   return Math.floor(value).toLocaleString("id-ID", { maximumFractionDigits: 0 });
 }
 
+const BILANGAN = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan"];
+
+function terbilangRatus(n: number): string {
+  if (n === 0) return "";
+  if (n < 10) return BILANGAN[n];
+  if (n === 10) return "Sepuluh";
+  if (n === 11) return "Sebelas";
+  if (n < 20) return BILANGAN[n - 10] + " Belas";
+  if (n < 100) {
+    const puluh = Math.floor(n / 10);
+    const sisa = n % 10;
+    return (puluh === 1 ? "Sepuluh" : BILANGAN[puluh] + " Puluh") + (sisa > 0 ? " " + BILANGAN[sisa] : "");
+  }
+  const ratus = Math.floor(n / 100);
+  const sisa = n % 100;
+  return (ratus === 1 ? "Seratus" : BILANGAN[ratus] + " Ratus") + (sisa > 0 ? " " + terbilangRatus(sisa) : "");
+}
+
+/**
+ * Convert non-negative integer to Indonesian words (for kwitansi etc.).
+ * Example: 8557000 -> "Delapan Juta Lima Ratus Lima Puluh Tujuh Ribu Rupiah"
+ */
+export function terbilang(n: number | null | undefined): string {
+  if (n == null || Number.isNaN(n)) return "–";
+  const num = Math.floor(Number(n));
+  if (num < 0) return "–";
+  if (num === 0) return "Nol Rupiah";
+  let out = "";
+  const juta = Math.floor(num / 1_000_000);
+  const ribu = Math.floor((num % 1_000_000) / 1_000);
+  const sisa = num % 1_000;
+  if (juta > 0) {
+    out += (juta === 1 ? "Satu Juta" : terbilangRatus(juta) + " Juta");
+  }
+  if (ribu > 0) {
+    if (out) out += " ";
+    out += (ribu === 1 ? "Seribu" : terbilangRatus(ribu) + " Ribu");
+  }
+  if (sisa > 0) {
+    if (out) out += " ";
+    out += terbilangRatus(sisa);
+  }
+  return (out || "Nol") + " Rupiah";
+}
+
 /** Format date for display (Indonesian locale). */
 export function formatDate(s: string | null | undefined): string {
   if (!s) return "–";
