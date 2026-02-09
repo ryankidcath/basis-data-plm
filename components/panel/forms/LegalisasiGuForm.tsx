@@ -44,7 +44,7 @@ export function LegalisasiGuForm({ permohonanId, onSaved }: LegalisasiGuFormProp
       tanggal_sps: (form.elements.namedItem("tanggal_sps") as HTMLInputElement).value || null,
       biaya: Number((form.elements.namedItem("biaya") as HTMLInputElement).value) || 0,
       tanggal_bayar_sps: (form.elements.namedItem("tanggal_bayar_sps") as HTMLInputElement).value || null,
-      tanggal_penyelesaian: (form.elements.namedItem("tanggal_penyelesaian") as HTMLInputElement).value || null,
+      tanggal_penyelesaian: row?.tanggal_penyelesaian ?? null,
     };
     let err: { message: string } | null = null;
     if (row) {
@@ -98,10 +98,6 @@ export function LegalisasiGuForm({ permohonanId, onSaved }: LegalisasiGuFormProp
           <div>
             <label className="block text-sm text-navy-600 mb-1">Tanggal Bayar SPS</label>
             <input type="date" name="tanggal_bayar_sps" defaultValue={row?.tanggal_bayar_sps?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
-          </div>
-          <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Penyelesaian</label>
-            <input type="date" name="tanggal_penyelesaian" defaultValue={row?.tanggal_penyelesaian?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
           </div>
         </div>
         <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">

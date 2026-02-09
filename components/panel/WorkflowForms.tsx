@@ -14,6 +14,7 @@ import { LegalisasiGuForm } from "./forms/LegalisasiGuForm";
 import { BidangTanahForm } from "./forms/BidangTanahForm";
 import { GambarUkurForm } from "./forms/GambarUkurForm";
 import { PetaBidangTanahForm } from "./forms/PetaBidangTanahForm";
+import { TanggalPenyelesaianForm } from "./forms/TanggalPenyelesaianForm";
 import { Card } from "@/components/ui/Card";
 import GeoJSONUpload from "./GeoJSONUpload";
 
@@ -111,6 +112,10 @@ export default function WorkflowForms({
                 </Card>
                 <GambarUkurForm permohonanId={permohonanId} onSaved={onSaved} />
                 <PetaBidangTanahForm
+                  permohonanId={permohonanId}
+                  onSaved={onSaved}
+                />
+                <TanggalPenyelesaianForm
                   permohonanId={permohonanId}
                   onSaved={onSaved}
                 />
