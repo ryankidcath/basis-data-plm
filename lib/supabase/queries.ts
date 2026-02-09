@@ -1,5 +1,5 @@
 import { createClient } from "./client";
-import type { PermohonanDetail } from "./types";
+import type { PermohonanDetail } from "@/lib/types";
 
 export interface BidangTanahGeo {
   id: string;

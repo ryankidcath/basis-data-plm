@@ -41,24 +41,25 @@ export function PermohonanSearchCombobox({
     }
     setSearchLoading(true);
     if (abortRef.current) abortRef.current.abort();
-    abortRef.current = new AbortController();
+    const controller = new AbortController();
+    abortRef.current = controller;
     const supabase = createClient();
-    supabase
-      .from("permohonan")
-      .select("id, kode_kjsb")
-      .ilike("kode_kjsb", `%${trimmed}%`)
-      .order("kode_kjsb")
-      .limit(SEARCH_LIMIT)
-      .abortSignal(abortRef.current.signal)
-      .then(({ data }) => {
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("permohonan")
+          .select("id, kode_kjsb")
+          .ilike("kode_kjsb", `%${trimmed}%`)
+          .order("kode_kjsb")
+          .limit(SEARCH_LIMIT)
+          .abortSignal(controller.signal);
         setSearchResults((data ?? []) as PermohonanOption[]);
-      })
-      .catch((err) => {
-        if (err?.name !== "AbortError") setSearchResults([]);
-      })
-      .finally(() => {
+      } catch (err: unknown) {
+        if ((err as { name?: string })?.name !== "AbortError") setSearchResults([]);
+      } finally {
         setSearchLoading(false);
-      });
+      }
+    })();
   }, []);
 
   useEffect(() => {

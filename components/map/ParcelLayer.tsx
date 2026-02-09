@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
+import type { Path } from "leaflet";
 import type { BidangTanahGeo } from "@/lib/supabase/queries";
 
 const GeoJSON = dynamic(
@@ -39,7 +40,7 @@ export default function ParcelLayer({ parcels, onParcelClick }: ParcelLayerProps
           geometry: geom,
         };
       })
-      .filter((f): f is GeoJSONFeature => f != null);
+      .filter((f) => f != null) as GeoJSONFeature[];
     return { type: "FeatureCollection" as const, features: feats };
   }, [parcels]);
 
@@ -60,13 +61,14 @@ export default function ParcelLayer({ parcels, onParcelClick }: ParcelLayerProps
         if (props?.permohonan_id && onParcelClick) {
           layer.on("click", () => onParcelClick(props.permohonan_id!));
         }
+        const pathLayer = layer as Path;
         layer.on({
           mouseover: () => {
-            layer.setStyle({ weight: 3, fillOpacity: 0.4 });
-            layer.bringToFront();
+            pathLayer.setStyle({ weight: 3, fillOpacity: 0.4 });
+            pathLayer.bringToFront();
           },
           mouseout: () => {
-            layer.setStyle({ weight: 2, fillOpacity: 0.25 });
+            pathLayer.setStyle({ weight: 2, fillOpacity: 0.25 });
           },
         });
       }}

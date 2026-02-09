@@ -231,7 +231,7 @@ export default function DetailPanel({
               <dt className="text-navy-500">Luas Hasil Ukur</dt>
               <dd>{formatLuasM2(p.legalisasi_gu.luas_hasil_ukur, false)}</dd>
               <dt className="text-navy-500">Penggunaan Tanah</dt>
-              <dd>{PENGGUNAAN_TANAH_2_LABELS[p.legalisasi_gu.penggunaan_tanah_2] ?? p.legalisasi_gu.penggunaan_tanah_2 || "–"}</dd>
+              <dd>{(PENGGUNAAN_TANAH_2_LABELS[p.legalisasi_gu.penggunaan_tanah_2] ?? p.legalisasi_gu.penggunaan_tanah_2) || "–"}</dd>
               <dt className="text-navy-500">Tanggal SPS</dt>
               <dd>{formatDate(p.legalisasi_gu.tanggal_sps)}</dd>
               <dt className="text-navy-500">Biaya</dt>
