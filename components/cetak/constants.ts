@@ -28,8 +28,5 @@ export const INVOICE_INFO_PERUSAHAAN = {
 export const INVOICE_KETERANGAN_PEMBAYARAN =
   "Pembayaran transfer ke Mandiri 1340085085008 a/n Benning dan Rekan";
 
-/** Role untuk blok Tagihan Untuk di invoice. */
-export const INVOICE_TAGIHAN_ROLE = "Notaris/PPAT";
-
-/** Nama Petugas Loket untuk tanda tangan invoice (kosong = placeholder). */
-export const INVOICE_PETUGAS_LOKET_NAMA = "";
+/** Nama Petugas Loket untuk tanda tangan invoice. */
+export const INVOICE_PETUGAS_LOKET_NAMA = "Lulu Unnisa";

@@ -6,9 +6,10 @@ import { PENGGUNAAN_TANAH_1_LABELS } from "@/lib/format";
 import {
   INVOICE_INFO_PERUSAHAAN,
   INVOICE_KETERANGAN_PEMBAYARAN,
-  INVOICE_TAGIHAN_ROLE,
   INVOICE_PETUGAS_LOKET_NAMA,
 } from "./constants";
+
+const BIAYA_SPASIAL_PER_BERKAS = 100_000;
 
 interface InvoiceDocProps {
   detail: PermohonanDetail | null;
@@ -28,22 +29,22 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
     ? PENGGUNAAN_TANAH_1_LABELS[detail.penggunaan_tanah_1] ?? detail.penggunaan_tanah_1
     : "–";
 
-  const barisSpasial =
-    infoSpasial && (infoSpasial.biaya ?? 0) > 0
-      ? { produk: "Informasi Data Spasial Pertanahan", jenis: "–", volume: "1 Berkas", jumlah: infoSpasial.biaya }
-      : null;
+  const showSpasial = !!infoSpasial;
+  const totalInput = keu?.biaya_pengukuran ?? 0;
+  const barisSpasial = showSpasial
+    ? { produk: "Informasi Data Spasial Pertanahan", jenis: "–", volume: "1 Berkas", jumlah: BIAYA_SPASIAL_PER_BERKAS }
+    : null;
   const barisPengukuran =
     keu != null
       ? {
           produk: "Pengukuran Kadastral dan Pembuatan Peta Bidang Tanah",
           jenis: penggunaanLabel,
           volume: `${detail.luas_permohonan ?? 0} m²`,
-          jumlah: keu.biaya_pengukuran ?? 0,
+          jumlah: showSpasial ? Math.max(0, totalInput - BIAYA_SPASIAL_PER_BERKAS) : totalInput,
         }
       : null;
 
-  const total =
-    (barisSpasial?.jumlah ?? 0) + (barisPengukuran?.jumlah ?? 0);
+  const total = totalInput;
   const barisList = [barisSpasial, barisPengukuran].filter(Boolean) as {
     produk: string;
     jenis: string;
@@ -53,24 +54,15 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between gap-6">
-        <div className="flex flex-col">
+      <div className="flex items-end justify-between gap-6">
+        <div className="flex shrink-0 justify-start">
           <img
             src="/logo.png"
             alt=""
-            className="h-14 w-auto object-contain"
-            width={140}
-            height={56}
+            className="h-24 w-auto object-contain object-left-bottom"
+            width={200}
+            height={96}
           />
-          <p className="mt-2 text-xs font-semibold uppercase text-navy-600">
-            Info Perusahaan
-          </p>
-          <p className="mt-0.5 text-sm font-semibold text-navy-900">
-            {INVOICE_INFO_PERUSAHAAN.nama}
-          </p>
-          <p className="mt-0.5 text-sm text-navy-700">
-            {INVOICE_INFO_PERUSAHAAN.alamat}
-          </p>
         </div>
         <div className="text-right">
           <h2 className="text-lg font-bold uppercase tracking-wide text-navy-900">
@@ -95,11 +87,23 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
         </div>
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex items-start justify-between gap-6">
+        <div className="text-left text-sm">
+          <p className="text-xs font-semibold uppercase text-navy-600">
+            Info Perusahaan
+          </p>
+          <p className="mt-0.5 font-semibold text-navy-900">
+            {INVOICE_INFO_PERUSAHAAN.nama}
+          </p>
+          <p className="mt-0.5 text-navy-700">
+            {INVOICE_INFO_PERUSAHAAN.alamat}
+          </p>
+        </div>
         <div className="text-right text-sm">
-          <p className="font-semibold text-navy-700">Tagihan Untuk</p>
-          <p className="text-navy-800">{INVOICE_TAGIHAN_ROLE}</p>
-          <p className="font-medium text-navy-900">{tagihanNama}</p>
+          <p className="text-xs font-semibold uppercase text-navy-600">
+            Tagihan Untuk
+          </p>
+          <p className="mt-0.5 font-medium text-navy-900">{tagihanNama}</p>
         </div>
       </div>
 
@@ -111,20 +115,20 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
         <>
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="bg-amber-900 text-white">
-                <th className="border border-amber-800 px-2 py-2 text-left font-medium">
+              <tr className="bg-[#A51A25] text-white">
+                <th className="border border-[#8B1620] px-2 py-2 text-left font-medium">
                   Produk
                 </th>
-                <th className="border border-amber-800 px-2 py-2 text-left font-medium">
+                <th className="border border-[#8B1620] px-2 py-2 text-left font-medium">
                   Jenis Properti
                 </th>
-                <th className="border border-amber-800 px-2 py-2 text-left font-medium">
+                <th className="border border-[#8B1620] px-2 py-2 text-left font-medium">
                   Volume
                 </th>
-                <th className="border border-amber-800 px-2 py-2 text-right font-medium">
+                <th className="border border-[#8B1620] px-2 py-2 text-right font-medium">
                   Harga Satuan
                 </th>
-                <th className="border border-amber-800 px-2 py-2 text-right font-medium">
+                <th className="border border-[#8B1620] px-2 py-2 text-right font-medium">
                   Jumlah Harga
                 </th>
               </tr>
@@ -182,7 +186,7 @@ export function InvoiceDoc({ detail }: InvoiceDocProps) {
           </p>
           <div className="mt-12 h-0 w-40 border-b border-navy-800" />
           <p className="mt-1 text-sm text-navy-900">
-            {INVOICE_PETUGAS_LOKET_NAMA || "–"}
+            {INVOICE_PETUGAS_LOKET_NAMA}
           </p>
         </div>
       </div>
