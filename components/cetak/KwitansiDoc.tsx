@@ -51,7 +51,7 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-[auto_1fr_auto] items-center gap-6">
+      <div className="grid grid-cols-[auto_1fr_auto] items-start gap-6">
         <img
           src="/logo.png"
           alt=""
@@ -67,9 +67,27 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
             {INVOICE_INFO_PERUSAHAAN.alamat}
           </p>
         </div>
-        <h2 className="text-lg font-bold uppercase tracking-wide text-navy-900">
-          Kwitansi
-        </h2>
+        <div className="flex flex-col items-end text-right">
+          <h2 className="text-lg font-bold uppercase tracking-wide text-navy-900">
+            Kwitansi
+          </h2>
+          {hasData && (
+            <div className="mt-2 space-y-1 text-sm">
+              <div className="flex gap-2 justify-end">
+                <span className="text-navy-700">No. Kwitansi</span>
+                <span className="min-w-[140px] border-b border-navy-400 border-dotted">
+                  {keu?.no_kwitansi || "–"}
+                </span>
+              </div>
+              <div className="flex gap-2 justify-end">
+                <span className="text-navy-700">No. Invoice</span>
+                <span className="min-w-[140px] border-b border-navy-400 border-dotted">
+                  {keu?.no_invoice || "–"}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {!hasData ? (
@@ -78,20 +96,6 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
         </p>
       ) : (
         <>
-          <div className="space-y-1 text-sm">
-            <div className="flex gap-2">
-              <span className="w-24 shrink-0 text-navy-700">No. Kwitansi</span>
-              <span className="min-w-[180px] flex-1 border-b border-navy-400 border-dotted">
-                {keu?.no_kwitansi || "–"}
-              </span>
-            </div>
-            <div className="flex gap-2">
-              <span className="w-24 shrink-0 text-navy-700">No. Invoice</span>
-              <span className="min-w-[180px] flex-1 border-b border-navy-400 border-dotted">
-                {keu?.no_invoice || "–"}
-              </span>
-            </div>
-          </div>
 
           <div className="space-y-3 text-sm">
             <LabelValueRow
@@ -119,19 +123,21 @@ export function KwitansiDoc({ detail }: KwitansiDocProps) {
                 Rp{formatNumber(amount)}
               </p>
             </div>
-            <div className="text-right text-sm">
-              <p className="text-navy-800">
-                {formatDateLong(keu?.tanggal_kwitansi)}
-              </p>
-              <p className="mt-4 font-semibold text-navy-900">
-                {INVOICE_INFO_PERUSAHAAN.nama}
-              </p>
-              <div className="mt-8">
-                <span className="inline-block min-w-[120px] border-b border-navy-800 border-dotted">
-                  {INVOICE_PETUGAS_LOKET_NAMA}
-                </span>
+            <div className="flex flex-col items-end">
+              <div className="w-52 text-center text-sm">
+                <p className="text-navy-800">
+                  {formatDateLong(keu?.tanggal_kwitansi)}
+                </p>
+                <p className="mt-16 font-semibold text-navy-900">
+                  {INVOICE_INFO_PERUSAHAAN.nama}
+                </p>
+                <div className="mt-16">
+                  <span className="inline-block min-w-[120px] border-b border-navy-800 border-dotted">
+                    {INVOICE_PETUGAS_LOKET_NAMA}
+                  </span>
+                </div>
+                <p className="mt-1 text-navy-700">Petugas Loket</p>
               </div>
-              <p className="mt-1 text-navy-700">Petugas Loket</p>
             </div>
           </div>
         </>
