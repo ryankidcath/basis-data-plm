@@ -10,9 +10,10 @@ interface BidangTanahFormProps {
   permohonanId: string;
   onSaved: () => void;
   embedded?: boolean;
+  refreshCount?: number;
 }
 
-export function BidangTanahForm({ permohonanId, onSaved, embedded = false }: BidangTanahFormProps) {
+export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refreshCount = 0 }: BidangTanahFormProps) {
   const supabase = createClient();
   const [rows, setRows] = useState<BidangTanah[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,12 +29,41 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false }: Bid
       setRows((data ?? []) as BidangTanah[]);
       setLoading(false);
     })();
-  }, [permohonanId]);
+  }, [permohonanId, embedded ? refreshCount : 0]);
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
     setSaving(true);
     setError(null);
+    if (embedded) {
+      const { data: rowWithoutNib } = await supabase
+        .from("bidang_tanah")
+        .select("id")
+        .eq("permohonan_id", permohonanId)
+        .or("nib.is.null,nib.eq.")
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      if (!rowWithoutNib) {
+        setError("Upload GeoJSON terlebih dahulu, lalu isi NIB dan simpan.");
+        setSaving(false);
+        return;
+      }
+      const { error: err } = await supabase
+        .from("bidang_tanah")
+        .update({ nib: nib.trim() || null, tanggal_nib: tanggalNib || null })
+        .eq("id", rowWithoutNib.id);
+      setError(err?.message ?? null);
+      setSaving(false);
+      if (!err) {
+        setNib("");
+        setTanggalNib("");
+        onSaved();
+        const { data } = await supabase.from("bidang_tanah").select("id, permohonan_id, nib, tanggal_nib, luas_otomatis, created_at, updated_at").eq("permohonan_id", permohonanId);
+        setRows((data ?? []) as BidangTanah[]);
+      }
+      return;
+    }
     const { error: err } = await supabase.from("bidang_tanah").insert({
       permohonan_id: permohonanId,
       nib: nib.trim() || null,
@@ -70,6 +100,9 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false }: Bid
 
   const content = (
     <>
+      {embedded && (
+        <p className="text-xs text-navy-500 mb-3">Upload GeoJSON terlebih dahulu, lalu isi NIB dan klik Simpan.</p>
+      )}
       <form onSubmit={handleAdd} className="space-y-3">
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div className="grid grid-cols-2 gap-3">

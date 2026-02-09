@@ -107,7 +107,7 @@ export default function WorkflowForms({
                 <Card title="Bidang Tanah (NIB) & GeoJSON">
                   <GeoJSONUpload permohonanId={permohonanId} onSaved={onSaved} embedded />
                   <div className="mt-4 pt-4 border-t border-navy-200">
-                    <BidangTanahForm permohonanId={permohonanId} onSaved={onSaved} embedded />
+                    <BidangTanahForm permohonanId={permohonanId} onSaved={onSaved} embedded refreshCount={refreshCount} />
                   </div>
                 </Card>
                 <GambarUkurForm permohonanId={permohonanId} onSaved={onSaved} />
