@@ -22,6 +22,25 @@ export function formatNumber(value: number | null | undefined): string {
   return value.toLocaleString("id-ID");
 }
 
+/**
+ * Parse string with Indonesian thousand separators (dots) to integer.
+ * Strips all non-digit characters.
+ */
+export function parseIntegerFromFormatted(s: string): number {
+  const digits = s.replace(/\D/g, "");
+  if (digits === "") return 0;
+  const n = parseInt(digits, 10);
+  return Number.isNaN(n) ? 0 : n;
+}
+
+/**
+ * Format integer for display in input (id-ID: dot as thousand separator, no decimals).
+ */
+export function formatIntegerForInput(value: number): string {
+  if (value === 0) return "";
+  return Math.floor(value).toLocaleString("id-ID", { maximumFractionDigits: 0 });
+}
+
 /** Format date for display (Indonesian locale). */
 export function formatDate(s: string | null | undefined): string {
   if (!s) return "–";

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Keuangan } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
+import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 
 interface KeuanganFormProps {
   permohonanId: string;
@@ -79,7 +80,7 @@ export function KeuanganForm({ permohonanId, onSaved }: KeuanganFormProps) {
         </div>
         <div>
           <label className="block text-sm text-navy-600 mb-1">Biaya Pengukuran</label>
-          <input type="number" name="biaya_pengukuran" defaultValue={row?.biaya_pengukuran ?? 0} step="any" className="w-full px-3 py-2 border border-navy-300 rounded" />
+          <FormattedIntegerInput name="biaya_pengukuran" defaultValue={row?.biaya_pengukuran ?? 0} className="w-full px-3 py-2 border border-navy-300 rounded" />
         </div>
         <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
           {saving ? "Menyimpan..." : "Simpan"}

@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Permohonan, Pemohon, Klien } from "@/lib/types";
 import type { PenggunaanTanah1 } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
+import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 import { PENGGUNAAN_TANAH_1_LABELS } from "@/lib/format";
 import { KABUPATEN_CIREBON, KECAMATAN_LIST, getDesaByKecamatan } from "@/lib/wilayah";
 
@@ -123,7 +124,7 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Luas (m²)</label>
-            <input type="number" name="luas_permohonan" defaultValue={permohonan.luas_permohonan} step="any" className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <FormattedIntegerInput name="luas_permohonan" defaultValue={permohonan.luas_permohonan} className="w-full px-3 py-2 border border-navy-300 rounded" />
           </div>
         </div>
         <div>

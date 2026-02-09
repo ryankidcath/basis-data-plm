@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { InformasiSpasial, InformasiSpasialNib } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
+import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 
 interface InformasiSpasialFormProps {
   permohonanId: string;
@@ -114,7 +115,7 @@ export function InformasiSpasialForm({ permohonanId, onSaved }: InformasiSpasial
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Biaya</label>
-            <input type="number" name="biaya" defaultValue={row?.biaya ?? 0} step="any" className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <FormattedIntegerInput name="biaya" defaultValue={row?.biaya ?? 0} className="w-full px-3 py-2 border border-navy-300 rounded" />
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Tanggal Bayar SPS</label>

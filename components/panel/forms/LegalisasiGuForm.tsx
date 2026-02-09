@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { LegalisasiGu } from "@/lib/types";
 import type { PenggunaanTanah2 } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
+import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 import { PENGGUNAAN_TANAH_2_LABELS } from "@/lib/format";
 
 const PENGGUNAAN_TANAH_2: PenggunaanTanah2[] = ["pertanian", "non-pertanian"];
@@ -75,7 +76,7 @@ export function LegalisasiGuForm({ permohonanId, onSaved }: LegalisasiGuFormProp
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Luas Hasil Ukur (m²)</label>
-            <input type="number" name="luas_hasil_ukur" defaultValue={row?.luas_hasil_ukur ?? ""} step="any" className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <FormattedIntegerInput name="luas_hasil_ukur" defaultValue={row?.luas_hasil_ukur ?? ""} optional className="w-full px-3 py-2 border border-navy-300 rounded" />
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Penggunaan Tanah</label>
@@ -92,7 +93,7 @@ export function LegalisasiGuForm({ permohonanId, onSaved }: LegalisasiGuFormProp
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Biaya</label>
-            <input type="number" name="biaya" defaultValue={row?.biaya ?? 0} step="any" className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <FormattedIntegerInput name="biaya" defaultValue={row?.biaya ?? 0} className="w-full px-3 py-2 border border-navy-300 rounded" />
           </div>
           <div>
             <label className="block text-sm text-navy-600 mb-1">Tanggal Bayar SPS</label>
