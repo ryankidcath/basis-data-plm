@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { BidangTanah } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
 import { formatLuasM2 } from "@/lib/format";
@@ -54,6 +55,7 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
         if (!err) {
           setNib("");
           setTanggalNib("");
+          await updateStatusPermohonan(permohonanId);
           onSaved();
           const { data } = await supabase.from("bidang_tanah").select("id, permohonan_id, nib, tanggal_nib, luas_otomatis, created_at, updated_at").eq("permohonan_id", permohonanId);
           setRows((data ?? []) as BidangTanah[]);
@@ -70,6 +72,7 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
       if (!errInsert) {
         setNib("");
         setTanggalNib("");
+        await updateStatusPermohonan(permohonanId);
         onSaved();
         const { data } = await supabase.from("bidang_tanah").select("id, permohonan_id, nib, tanggal_nib, luas_otomatis, created_at, updated_at").eq("permohonan_id", permohonanId);
         setRows((data ?? []) as BidangTanah[]);
@@ -86,6 +89,7 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
     if (!err) {
       setNib("");
       setTanggalNib("");
+      await updateStatusPermohonan(permohonanId);
       onSaved();
       const { data } = await supabase.from("bidang_tanah").select("id, permohonan_id, nib, tanggal_nib, luas_otomatis, created_at, updated_at").eq("permohonan_id", permohonanId);
       setRows((data ?? []) as BidangTanah[]);
@@ -96,6 +100,7 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
     const { error: err } = await supabase.from("bidang_tanah").update({ nib: nibVal || null, tanggal_nib: tanggalVal || null }).eq("id", id);
     if (!err) {
       setEditingId(null);
+      await updateStatusPermohonan(permohonanId);
       onSaved();
       const { data } = await supabase.from("bidang_tanah").select("id, permohonan_id, nib, tanggal_nib, luas_otomatis, created_at, updated_at").eq("permohonan_id", permohonanId);
       setRows((data ?? []) as BidangTanah[]);
@@ -104,6 +109,7 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
 
   async function handleDelete(id: string) {
     await supabase.from("bidang_tanah").delete().eq("id", id);
+    await updateStatusPermohonan(permohonanId);
     onSaved();
     setRows((r) => r.filter((x) => x.id !== id));
   }

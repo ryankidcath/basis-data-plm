@@ -142,7 +142,7 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
       kota_kabupaten: (form.elements.namedItem("kota_kabupaten") as HTMLSelectElement).value?.trim() || null,
       kecamatan: (form.elements.namedItem("kecamatan") as HTMLSelectElement).value?.trim() || null,
       kelurahan_desa: (form.elements.namedItem("kelurahan_desa") as HTMLSelectElement).value?.trim() || null,
-      status_permohonan: "draft",
+      status_permohonan: "Pendaftaran",
     }).select("id").single();
     setSaving(false);
     if (err) {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { Keuangan } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
 import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
@@ -49,7 +50,10 @@ export function KeuanganForm({ permohonanId, onSaved }: KeuanganFormProps) {
     }
     setError(err?.message ?? null);
     setSaving(false);
-    if (!err) onSaved();
+    if (!err) {
+      await updateStatusPermohonan(permohonanId);
+      onSaved();
+    }
   }
 
   if (loading) return null;

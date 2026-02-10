@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { GambarUkur } from "@/lib/types";
 import { Card } from "@/components/ui/Card";
 
@@ -47,7 +48,10 @@ export function GambarUkurForm({ permohonanId, onSaved }: GambarUkurFormProps) {
     }
     setError(err?.message ?? null);
     setSaving(false);
-    if (!err) onSaved();
+    if (!err) {
+      await updateStatusPermohonan(permohonanId);
+      onSaved();
+    }
   }
 
   if (loading) return null;

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { updateStatusPermohonan } from "@/lib/status-permohonan";
 
 interface GeoJSONUploadProps {
   permohonanId: string;
@@ -81,6 +82,7 @@ export default function GeoJSONUpload({ permohonanId, onSaved, embedded = false 
         }
       }
       setSuccess(true);
+      await updateStatusPermohonan(permohonanId);
       onSaved();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Gagal memproses file GeoJSON.");

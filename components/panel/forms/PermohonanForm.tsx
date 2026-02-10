@@ -79,7 +79,6 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
       kota_kabupaten: (form.elements.namedItem("kota_kabupaten") as HTMLSelectElement).value?.trim() || null,
       kecamatan: (form.elements.namedItem("kecamatan") as HTMLSelectElement).value?.trim() || null,
       kelurahan_desa: (form.elements.namedItem("kelurahan_desa") as HTMLSelectElement).value?.trim() || null,
-      status_permohonan: (form.elements.namedItem("status_permohonan") as HTMLInputElement).value.trim() || null,
     };
     const { error: err } = await supabase.from("permohonan").update(payload).eq("id", permohonanId);
     setSaving(false);
@@ -187,7 +186,10 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
         </div>
         <div>
           <label className="block text-sm text-navy-600 mb-1">Status Permohonan</label>
-          <input name="status_permohonan" defaultValue={permohonan.status_permohonan ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+          <p className="px-3 py-2 bg-navy-100 text-navy-800 rounded border border-navy-200 text-sm">
+            {permohonan.status_permohonan ?? "–"}
+          </p>
+          <p className="text-xs text-navy-500 mt-1">Status diisi otomatis menurut tahapan data.</p>
         </div>
         <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
           {saving ? "Menyimpan..." : "Simpan"}
