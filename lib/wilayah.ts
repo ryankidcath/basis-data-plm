@@ -11,7 +11,7 @@ export interface WilayahKecamatan {
 }
 
 export const WILAYAH_CIREBON: WilayahKecamatan[] = [
-  { kecamatan: "Arjawinangun", desa: ["Arjawinangun", "Bulak", "Geyongan", "Jungjang", "Jungjang Wetan", "Karangsambung", "Kebonturi", "Rawagatel", "Sende", "Tegalgubug", "Tegalgubug Lor"] },
+  { kecamatan: "Arjawinangun", desa: ["Arjawinangun", "Bulak", "Geyongan", "Jungjang Wetan", "Jungjang", "Karangsambung", "Kebonturi", "Rawagatel", "Sende", "Tegalgubug", "Tegalgubug Lor"] },
   { kecamatan: "Astanajapura", desa: ["Astanajapura", "Buntet", "Japura Kidul", "Japurabakti", "Kanci", "Kanci Kulon", "Kendal", "Mertapada Kulon", "Mertapada Wetan", "Munjul", "Sidamulya"] },
   { kecamatan: "Babakan", desa: ["Babakan", "Babakangebang", "Bojonggebang", "Cangkuang", "Gembongan", "Gembonganmekar", "Karangwangun", "Kudukeras", "Kudumulya", "Pakusamben", "Serang Kulon", "Serang Wetan", "Sumber Kidul", "Sumber Lor"] },
   { kecamatan: "Beber", desa: ["Beber", "Ciawigajah", "Cikancas", "Cipinang", "Halimpu", "Kondangsari", "Patapan", "Sindanghayu", "Sindangkasih", "Wanayasa"] },
@@ -21,7 +21,7 @@ export const WILAYAH_CIREBON: WilayahKecamatan[] = [
   { kecamatan: "Dukupuntang", desa: ["Balad", "Bobos", "Cangkoak", "Cikalahang", "Cipanas", "Cisaat", "Dukupuntang", "Girinata", "Kedongdong Kidul", "Kepunduan", "Mandala", "Sindangjawa", "Sindangmekar"] },
   { kecamatan: "Gebang", desa: ["Dompyong Kulon", "Dompyong Wetan", "Gagasari", "Gebang", "Gebangilir", "Gebangkulon", "Gebangmekar", "Gebangudik", "Kalimaro", "Kalimekar", "Kalipasung", "Melakasari", "Pelayangan"] },
   { kecamatan: "Gegesik", desa: ["Bayalangu Kidul", "Bayalangu Lor", "Gegesik Kidul", "Gegesik Kulon", "Gegesik Lor", "Gegesik Wetan", "Jagapura Kidul", "Jagapura Kulon", "Jagapura Lor", "Jagapura Wetan", "Kedungdalem", "Panunggul", "Sibubut", "Slendra"] },
-  { kecamatan: "Gempol", desa: ["Cikeusal", "Cupang", "Gempol", "Kedungbunder", "Kempek", "Palimanan Barat", "Walahar", "Winong"] },
+  { kecamatan: "Gempol", desa: ["Cupang", "Cikeusal", "Gempol", "Kedungbunder", "Kempek", "Palimanan Barat", "Walahar", "Winong"] },
   { kecamatan: "Greged", desa: ["Durajaya", "Greged", "Gumulunglebak", "Gumulungtonggoh", "Jatipancur", "Kamarang", "Kamarang Lebak", "Lebakmekar", "Nanggela", "Sindangkempeng"] },
   { kecamatan: "Gunungjati", desa: ["Adidharma", "Astana", "Babadan", "Buyut", "Grogol", "Jadimulya", "Jatimerta", "Kalisapu", "Klayan", "Mayung", "Mertasinga", "Pasindangan", "Sambeng", "Sirnabaya", "Wanakaya"] },
   { kecamatan: "Jamblang", desa: ["Bakung Kidul", "Bakung Lor", "Bojong Lor", "Bojong Wetan", "Jamblang", "Orimalang", "Sitiwinangun", "Wangunharja"] },
@@ -48,7 +48,7 @@ export const WILAYAH_CIREBON: WilayahKecamatan[] = [
   { kecamatan: "Susukan", desa: ["Bojong Kulon", "Bunder", "Gintung Lor", "Jatianom", "Jatipura", "Kedongdong", "Kejiwan", "Luwungkencana", "Susukan", "Tangkil", "Ujunggebang", "Wiyong"] },
   { kecamatan: "Susukanlebak", desa: ["Curug", "Curug Wetan", "Kaligawe", "Kaligawe Wetan", "Karangmanggu", "Pasawahan", "Sampih", "Susukanagung", "Susukanlebak", "Susukantonggoh", "Wilulang"] },
   { kecamatan: "Talun", desa: ["Cempaka", "Ciperna", "Cirebon Girang", "Kecomberan", "Kepongpongan", "Kerandon", "Kubang", "Sampiran", "Sarwadadi", "Wanasaba Kidul", "Wanasaba Lor"] },
-  { kecamatan: "Tengah Tani", desa: ["Kalideres", "Kemiri", "Kemlaka Gede", "Pangkalan", "Sindang", "Tengah Tani", "Wedung"] },
+  { kecamatan: "Tengah Tani", desa: ["Astapada", "Battembat", "Dawuan", "Gesik", "Kalibaru", "Kalitengah", "Kemlaka Gede", "Palir"] },
   { kecamatan: "Waled", desa: ["Cikulak", "Cikulak Kidul", "Cisaat", "Ciuyah", "Gunungjati", "Karanganyar", "Kertawangunan", "Mekarsari", "Sukagumiwang", "Waled Kota", "Waled Desa"] },
   { kecamatan: "Weru", desa: ["Karanganyar", "Kertasari", "Megu Cilik", "Megu Gede", "Mundu Pesisir", "Sitiwinangun", "Tegalsari", "Weru Kidul", "Weru Lor"] },
 ];
