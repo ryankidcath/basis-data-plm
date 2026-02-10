@@ -48,7 +48,7 @@ export const WILAYAH_CIREBON: WilayahKecamatan[] = [
   { kecamatan: "Susukan", desa: ["Bojong Kulon", "Bunder", "Gintung Lor", "Jatianom", "Jatipura", "Kedongdong", "Kejiwan", "Luwungkencana", "Susukan", "Tangkil", "Ujunggebang", "Wiyong"] },
   { kecamatan: "Susukanlebak", desa: ["Curug", "Curug Wetan", "Kaligawe", "Kaligawe Wetan", "Karangmanggu", "Pasawahan", "Sampih", "Susukanagung", "Susukanlebak", "Susukantonggoh", "Wilulang"] },
   { kecamatan: "Talun", desa: ["Cempaka", "Ciperna", "Cirebon Girang", "Kecomberan", "Kepongpongan", "Kerandon", "Kubang", "Sampiran", "Sarwadadi", "Wanasaba Kidul", "Wanasaba Lor"] },
-  { kecamatan: "Tengah Tani", desa: ["Kalideres", "Kemiri", "Kertawinangun", "Pangkalan", "Sindang", "Tengah Tani", "Wedung"] },
+  { kecamatan: "Tengah Tani", desa: ["Kalideres", "Kemiri", "Kemlaka Gede", "Pangkalan", "Sindang", "Tengah Tani", "Wedung"] },
   { kecamatan: "Waled", desa: ["Cikulak", "Cikulak Kidul", "Cisaat", "Ciuyah", "Gunungjati", "Karanganyar", "Kertawangunan", "Mekarsari", "Sukagumiwang", "Waled Kota", "Waled Desa"] },
   { kecamatan: "Weru", desa: ["Karanganyar", "Kertasari", "Megu Cilik", "Megu Gede", "Mundu Pesisir", "Sitiwinangun", "Tegalsari", "Weru Kidul", "Weru Lor"] },
 ];

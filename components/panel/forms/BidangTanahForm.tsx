@@ -44,18 +44,30 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
         .order("created_at", { ascending: true })
         .limit(1)
         .maybeSingle();
-      if (!rowWithoutNib) {
-        setError("Upload GeoJSON terlebih dahulu, lalu isi NIB dan simpan.");
+      if (rowWithoutNib) {
+        const { error: err } = await supabase
+          .from("bidang_tanah")
+          .update({ nib: nib.trim() || null, tanggal_nib: tanggalNib || null })
+          .eq("id", rowWithoutNib.id);
+        setError(err?.message ?? null);
         setSaving(false);
+        if (!err) {
+          setNib("");
+          setTanggalNib("");
+          onSaved();
+          const { data } = await supabase.from("bidang_tanah").select("id, permohonan_id, nib, tanggal_nib, luas_otomatis, created_at, updated_at").eq("permohonan_id", permohonanId);
+          setRows((data ?? []) as BidangTanah[]);
+        }
         return;
       }
-      const { error: err } = await supabase
-        .from("bidang_tanah")
-        .update({ nib: nib.trim() || null, tanggal_nib: tanggalNib || null })
-        .eq("id", rowWithoutNib.id);
-      setError(err?.message ?? null);
+      const { error: errInsert } = await supabase.from("bidang_tanah").insert({
+        permohonan_id: permohonanId,
+        nib: nib.trim() || null,
+        tanggal_nib: tanggalNib || null,
+      });
+      setError(errInsert?.message ?? null);
       setSaving(false);
-      if (!err) {
+      if (!errInsert) {
         setNib("");
         setTanggalNib("");
         onSaved();
@@ -101,7 +113,7 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
   const content = (
     <>
       {embedded && (
-        <p className="text-xs text-navy-500 mb-3">Upload GeoJSON terlebih dahulu, lalu isi NIB dan klik Simpan.</p>
+        <p className="text-xs text-navy-500 mb-3">Upload GeoJSON lalu isi NIB dan simpan, atau isi NIB dulu lalu upload GeoJSON.</p>
       )}
       <form onSubmit={handleAdd} className="space-y-3">
         {error && <p className="text-sm text-red-600">{error}</p>}

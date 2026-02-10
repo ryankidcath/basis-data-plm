@@ -97,6 +97,14 @@ export default function DashboardPage() {
           </div>
         <div className="flex items-center gap-5">
           <span className="text-navy-200 text-sm">Permohonan Langsung Masyarakat</span>
+          <a
+            href="/api/export/permohonan?format=csv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gold-400 hover:text-gold-300 text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+          >
+            Ekspor data
+          </a>
           <button
             type="button"
             onClick={handleSignOut}
