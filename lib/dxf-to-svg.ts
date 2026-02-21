@@ -188,11 +188,11 @@ export function dxfToSvg(
 
   for (const e of entities) {
     const stroke = colorToHex(e.color);
-    if (e.type === "LINE" && e.vertices?.length >= 2) {
+    if (e.type === "LINE" && e.vertices && e.vertices.length >= 2) {
       const [x1, y1] = t(e.vertices[0].x, e.vertices[0].y);
       const [x2, y2] = t(e.vertices[1].x, e.vertices[1].y);
       paths.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="0.5"/>`);
-    } else if (e.type === "LWPOLYLINE" && e.vertices?.length) {
+    } else if (e.type === "LWPOLYLINE" && e.vertices && e.vertices.length > 0) {
       const pts = e.vertices.map((v) => t(v.x, v.y)).map(([a, b]) => `${a},${b}`).join(" ");
       paths.push(`<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="0.5"/>`);
     } else if (e.type === "CIRCLE" && e.center != null && e.radius != null) {
@@ -215,7 +215,7 @@ export function dxfToSvg(
       const rot = e.rotation ?? 0;
       const fill = colorToHex(e.color);
       texts.push(`<text x="${sx}" y="${sy}" font-size="${Math.max(2, h)}" fill="${fill}" text-anchor="start" dominant-baseline="alphabetic" transform="rotate(${-rot} ${sx} ${sy})">${escapeXml(e.text)}</text>`);
-    } else if (e.type === "POLYLINE" && e.vertices?.length) {
+    } else if (e.type === "POLYLINE" && e.vertices && e.vertices.length > 0) {
       const pts = (e.vertices as Point[]).map((v) => t(v.x, v.y)).map(([a, b]) => `${a},${b}`).join(" ");
       paths.push(`<polyline points="${pts}" fill="none" stroke="${stroke}" stroke-width="0.5"/>`);
     }
