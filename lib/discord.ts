@@ -83,7 +83,7 @@ export async function sendFileToThread(
   if (!token) return;
 
   const form = new FormData();
-  form.append("file", new Blob([fileBuffer]), filename);
+  form.append("file", new Blob([new Uint8Array(fileBuffer)]), filename);
   if (content) form.append("content", content);
 
   const res = await fetch(`${DISCORD_API}/channels/${threadId}/messages`, {
