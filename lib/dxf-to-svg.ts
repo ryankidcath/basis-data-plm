@@ -51,7 +51,7 @@ export type Bbox = { minX: number; minY: number; maxX: number; maxY: number } | 
  * Parses DXF string and returns bounding box. Assumes 1 DXF unit = 1 meter.
  */
 export function getBboxFromDxf(dxfString: string): Bbox {
-  let dxf: { entities?: unknown[] };
+  let dxf: { entities?: unknown[] } | null;
   try {
     const parser = new DxfParser();
     dxf = parser.parse(dxfString);
@@ -69,7 +69,7 @@ const LAYER_BIDANG = "BIDANG";
  * Returns bounding box for BIDANG layer entities only (closed LWPOLYLINE with shape).
  */
 export function getBboxBidangFromDxf(dxfString: string): Bbox {
-  let dxf: { entities?: unknown[] };
+  let dxf: { entities?: unknown[] } | null;
   try {
     const parser = new DxfParser();
     dxf = parser.parse(dxfString);
@@ -125,7 +125,7 @@ export function dxfToSvg(
   padding = 10,
   overlays: DxfToSvgOverlay[] = []
 ): string {
-  let dxf: { entities?: unknown[] };
+  let dxf: { entities?: unknown[] } | null;
   try {
     const parser = new DxfParser();
     dxf = parser.parse(dxfString);
@@ -261,7 +261,7 @@ export function dxfToSvgBidangOnly(
   options: DxfToSvgBidangOnlyOptions = {}
 ): string {
   const { width = 200, height = 120, padding = 8 } = options;
-  let dxf: { entities?: unknown[] };
+  let dxf: { entities?: unknown[] } | null;
   try {
     const parser = new DxfParser();
     dxf = parser.parse(dxfString);
