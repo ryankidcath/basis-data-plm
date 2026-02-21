@@ -11,6 +11,8 @@ import { InvoiceDoc } from "@/components/cetak/InvoiceDoc";
 import { KwitansiDoc } from "@/components/cetak/KwitansiDoc";
 import { SuratTugasDoc } from "@/components/cetak/SuratTugasDoc";
 import { SuratPemberitahuanDoc } from "@/components/cetak/SuratPemberitahuanDoc";
+import { GambarHasilUkurDoc } from "@/components/cetak/GambarHasilUkurDoc";
+import { fetchBidangTanahGeo, type BidangTanahGeo } from "@/lib/supabase/queries";
 
 const DOC_TYPES = [
   "tanda_terima",
@@ -19,6 +21,7 @@ const DOC_TYPES = [
   "kwitansi",
   "surat_tugas",
   "surat_pemberitahuan",
+  "gambar_hasil_ukur",
 ] as const;
 type DocType = (typeof DOC_TYPES)[number];
 
@@ -33,6 +36,7 @@ const DOC_LABELS: Record<DocType, string> = {
   kwitansi: "Kwitansi",
   surat_tugas: "Surat Tugas",
   surat_pemberitahuan: "Surat Pemberitahuan",
+  gambar_hasil_ukur: "Gambar Ukur",
 };
 
 export default function CetakPage() {
@@ -42,6 +46,7 @@ export default function CetakPage() {
 
   const [detail, setDetail] = useState<PermohonanDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [parcelsForGu, setParcelsForGu] = useState<BidangTanahGeo[]>([]);
 
   useEffect(() => {
     if (!permohonanId) {
@@ -64,6 +69,21 @@ export default function CetakPage() {
       cancelled = true;
     };
   }, [permohonanId]);
+
+  useEffect(() => {
+    if (docTypeParam !== "gambar_hasil_ukur" || !permohonanId) return;
+    let cancelled = false;
+    fetchBidangTanahGeo()
+      .then((all) => {
+        if (!cancelled) setParcelsForGu(all.filter((p) => p.permohonan_id === permohonanId));
+      })
+      .catch(() => {
+        if (!cancelled) setParcelsForGu([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [permohonanId, docTypeParam]);
 
   const docType = isDocType(docTypeParam) ? docTypeParam : null;
 
@@ -121,13 +141,24 @@ export default function CetakPage() {
         return <SuratTugasDoc detail={detail} />;
       case "surat_pemberitahuan":
         return <SuratPemberitahuanDoc detail={detail} />;
+      case "gambar_hasil_ukur":
+        return <GambarHasilUkurDoc detail={detail} parcels={parcelsForGu} />;
       default:
         return null;
     }
   }
 
+  const isGu = docType === "gambar_hasil_ukur";
+
   return (
     <div className="min-h-screen bg-navy-50">
+      <style
+        dangerouslySetInnerHTML={{
+          __html: isGu
+            ? "@media print { @page { size: A3 landscape; } }"
+            : "@media print { @page { size: A3; } }",
+        }}
+      />
       <div className="no-print sticky top-0 z-10 bg-white border-b border-navy-200 px-4 py-3 flex items-center justify-between shadow-sm">
         <span className="text-sm text-navy-600">
           {DOC_LABELS[docType]} – {detail.kode_kjsb}
@@ -149,7 +180,13 @@ export default function CetakPage() {
         </div>
       </div>
       <div className="p-6 print:p-0">
-        <div className="max-w-[180mm] mx-auto bg-white shadow print:shadow-none rounded-lg print:rounded-none px-6 py-8 print:px-5 print:py-6">
+        <div
+          className={
+            isGu
+              ? "bg-white shadow print:shadow-none rounded-lg print:rounded-none print:w-[420mm] print:h-[297mm] print:p-0 w-full max-w-[420mm] min-h-[297mm] px-6 py-8"
+              : "max-w-[180mm] mx-auto bg-white shadow print:shadow-none rounded-lg print:rounded-none px-6 py-8 print:px-5 print:py-6"
+          }
+        >
           {renderDoc()}
         </div>
       </div>

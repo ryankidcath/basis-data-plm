@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useParcelGeometries } from "./useParcelGeometries";
 import MapView from "./MapView";
 import ParcelLayer from "./ParcelLayer";
@@ -8,10 +9,21 @@ import FitBoundsToParcels from "./FitBoundsToParcels";
 interface MapSectionProps {
   onParcelClick?: (permohonanId: string) => void;
   fitToPermohonanId?: string | null;
+  /** Saat berubah (mis. setelah upload DXF/GeoJSON), daftar parcel di-refetch agar peta zoom ke bidang terbaru. */
+  refreshTrigger?: number;
 }
 
-export default function MapSection({ onParcelClick, fitToPermohonanId }: MapSectionProps) {
-  const { parcels, loading, error } = useParcelGeometries();
+export default function MapSection({ onParcelClick, fitToPermohonanId, refreshTrigger }: MapSectionProps) {
+  const { parcels, loading, error, refresh } = useParcelGeometries();
+
+  useEffect(() => {
+    if (fitToPermohonanId) refresh();
+  }, [fitToPermohonanId, refresh]);
+
+  useEffect(() => {
+    if (refreshTrigger != null && refreshTrigger > 0) refresh();
+  }, [refreshTrigger, refresh]);
+
   const parcelsToFit = fitToPermohonanId
     ? parcels.filter((p) => p.permohonan_id === fitToPermohonanId)
     : parcels;

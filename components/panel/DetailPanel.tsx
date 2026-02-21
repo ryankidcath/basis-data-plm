@@ -1,7 +1,12 @@
 "use client";
 
-import type { PermohonanDetail } from "@/lib/types";
+import type { PermohonanDetail, JenisLisensi } from "@/lib/types";
 import { formatNumber, formatLuasM2, PENGGUNAAN_TANAH_1_LABELS, PENGGUNAAN_TANAH_2_LABELS } from "@/lib/format";
+
+const JABATAN_LABELS: Record<JenisLisensi, string> = {
+  "surveyor kadaster": "Surveyor Kadaster",
+  "asisten surveyor kadaster": "Asisten Surveyor Kadaster",
+};
 
 interface DetailPanelProps {
   detail: PermohonanDetail | null;
@@ -214,6 +219,26 @@ export default function DetailPanel({
               <dd>{p.surat_tugas_pemberitahuan.no_surat_pemberitahuan || "–"}</dd>
               <dt className="text-navy-500">Tanggal Surat Pemberitahuan</dt>
               <dd>{formatDate(p.surat_tugas_pemberitahuan.tanggal_surat_pemberitahuan)}</dd>
+            </dl>
+          </section>
+        )}
+
+        {p.pengukuran && p.pengukuran.length > 0 && (
+          <section className="rounded-xl border border-navy-200 p-3 shadow-sm">
+            <h3 className="text-xs font-medium text-navy-500 uppercase tracking-wide mb-2">
+              Surveyor
+            </h3>
+            <dl className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+              {p.pengukuran.flatMap((u, i) => [
+                <dt key={`${u.id}-nama`} className="text-navy-500">Nama {p.pengukuran!.length > 1 ? `(${i + 1})` : ""}</dt>,
+                <dd key={`${u.id}-nama-v`}>{u.surveyor?.nama ?? "–"}</dd>,
+                <dt key={`${u.id}-lisensi`} className="text-navy-500">No. Lisensi {p.pengukuran!.length > 1 ? `(${i + 1})` : ""}</dt>,
+                <dd key={`${u.id}-lisensi-v`}>{u.surveyor?.no_lisensi ?? "–"}</dd>,
+                <dt key={`${u.id}-jabatan`} className="text-navy-500">Jabatan {p.pengukuran!.length > 1 ? `(${i + 1})` : ""}</dt>,
+                <dd key={`${u.id}-jabatan-v`}>{u.surveyor?.jenis_lisensi ? JABATAN_LABELS[u.surveyor.jenis_lisensi] : "–"}</dd>,
+                <dt key={`${u.id}-tanggal`} className="text-navy-500">Tanggal Pengukuran {p.pengukuran!.length > 1 ? `(${i + 1})` : ""}</dt>,
+                <dd key={`${u.id}-tanggal-v`}>{formatDate(u.tanggal_pengukuran)}</dd>,
+              ])}
             </dl>
           </section>
         )}

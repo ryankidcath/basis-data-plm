@@ -149,7 +149,14 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
       setError(err.message);
       return;
     }
-    if (data?.id) onCreated(data.id);
+    if (data?.id) {
+      onCreated(data.id);
+      fetch("/api/discord/create-thread", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ permohonanId: data.id }),
+      }).catch(() => {});
+    }
   }
 
   if (loading) return null;

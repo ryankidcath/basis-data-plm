@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.3.2",
     "@supabase/ssr": "^0.5.0",
     "@supabase/supabase-js": "^2.45.0",
+    "dxf-parser": "^1.1.2",
     "leaflet": "^1.9.4",
     "next": "14.2.18",
+    "proj4": "^2.20.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-leaflet": "^4.2.1"
+    "react-leaflet": "^4.2.1",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.8",

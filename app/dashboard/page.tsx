@@ -117,7 +117,11 @@ export default function DashboardPage() {
       <div className="flex-1 flex min-h-0">
         <aside className="w-[52%] min-w-0 flex flex-col border-r border-navy-200 bg-white">
           <div className="flex-1 min-h-0 relative">
-            <MapSection onParcelClick={handleParcelClick} fitToPermohonanId={selectedPermohonanId} />
+            <MapSection
+              onParcelClick={handleParcelClick}
+              fitToPermohonanId={selectedPermohonanId}
+              refreshTrigger={refreshCount}
+            />
           </div>
         </aside>
         <main className="w-[48%] min-w-0 flex flex-col bg-navy-50 overflow-hidden">
