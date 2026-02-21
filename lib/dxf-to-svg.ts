@@ -24,7 +24,7 @@ function getBbox(
   }
 
   for (const e of entities) {
-    if (e.type === "LINE" && e.vertices?.length >= 2) {
+    if (e.type === "LINE" && e.vertices && e.vertices.length >= 2) {
       add(e.vertices[0].x, e.vertices[0].y);
       add(e.vertices[1].x, e.vertices[1].y);
     } else if (e.type === "LWPOLYLINE" && e.vertices) {
