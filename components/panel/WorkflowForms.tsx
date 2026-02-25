@@ -96,7 +96,7 @@ export default function WorkflowForms({
             {activeTab === "3" && (
               <div className="space-y-4">
                 <SuratTugasForm permohonanId={permohonanId} onSaved={onSaved} />
-                <PengukuranForm permohonanId={permohonanId} onSaved={onSaved} />
+                <PengukuranForm permohonanId={permohonanId} onSaved={onSaved} refreshCount={refreshCount} />
               </div>
             )}
             {activeTab === "4" && (

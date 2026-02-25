@@ -14,9 +14,10 @@ const JENIS_LISENSI_LABELS: Record<JenisLisensi, string> = {
 interface PengukuranFormProps {
   permohonanId: string;
   onSaved: () => void;
+  refreshCount?: number;
 }
 
-export function PengukuranForm({ permohonanId, onSaved }: PengukuranFormProps) {
+export function PengukuranForm({ permohonanId, onSaved, refreshCount = 0 }: PengukuranFormProps) {
   const supabase = createClient();
   const [stp, setStp] = useState<SuratTugasPemberitahuan | null>(null);
   const [pengukuranList, setPengukuranList] = useState<(Pengukuran & { surveyor?: Surveyor })[]>([]);
@@ -53,7 +54,7 @@ export function PengukuranForm({ permohonanId, onSaved }: PengukuranFormProps) {
       setSurveyorList((surRes.data ?? []) as Surveyor[]);
       setLoading(false);
     })();
-  }, [permohonanId]);
+  }, [permohonanId, refreshCount]);
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();

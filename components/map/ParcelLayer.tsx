@@ -46,9 +46,11 @@ export default function ParcelLayer({ parcels, onParcelClick }: ParcelLayerProps
 
   if (features.features.length === 0) return null;
 
+  const parcelKey = `parcels-${parcels.length}-${parcels.map((p) => p.id).join("-")}`;
+
   return (
     <GeoJSON
-      key="parcels"
+      key={parcelKey}
       data={features}
       style={{
         color: "#171717",
