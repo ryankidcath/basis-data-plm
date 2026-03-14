@@ -8,6 +8,65 @@ export interface BidangTanahGeo {
   geom_json: string | null;
 }
 
+export interface StatusAggregationRow {
+  status_permohonan: string;
+  count: number;
+}
+
+export async function fetchStatusAggregation(): Promise<StatusAggregationRow[]> {
+  const supabase = createClient();
+  const { data, error } = await supabase.rpc("get_status_aggregation");
+  if (error) throw error;
+  return (data ?? []) as StatusAggregationRow[];
+}
+
+export interface PermohonanListItem {
+  id: string;
+  kode_kjsb: string;
+  tanggal_permohonan: string;
+  status_permohonan: string;
+  lokasi_tanah: string;
+  created_at: string;
+  pemohon: { nama: string } | null;
+}
+
+export async function fetchPermohonanListByStatus(
+  status: string,
+  kodeSearch?: string
+): Promise<PermohonanListItem[]> {
+  const supabase = createClient();
+  let query = supabase
+    .from("permohonan")
+    .select("id, kode_kjsb, tanggal_permohonan, status_permohonan, lokasi_tanah, created_at, pemohon(nama)")
+    .eq("status_permohonan", status)
+    .order("created_at", { ascending: false });
+
+  if (kodeSearch?.trim()) {
+    query = query.ilike("kode_kjsb", `%${kodeSearch.trim()}%`);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  const rows = (data ?? []) as Array<{
+    id: string;
+    kode_kjsb: string;
+    tanggal_permohonan: string;
+    status_permohonan: string;
+    lokasi_tanah: string;
+    created_at: string;
+    pemohon: { nama: string } | { nama: string }[] | null;
+  }>;
+  return rows.map((r) => ({
+    id: r.id,
+    kode_kjsb: r.kode_kjsb,
+    tanggal_permohonan: r.tanggal_permohonan,
+    status_permohonan: r.status_permohonan,
+    lokasi_tanah: r.lokasi_tanah,
+    created_at: r.created_at,
+    pemohon: Array.isArray(r.pemohon) ? r.pemohon[0] ?? null : r.pemohon ?? null,
+  })) as PermohonanListItem[];
+}
+
 export async function fetchBidangTanahGeo(): Promise<BidangTanahGeo[]> {
   const supabase = createClient();
   const { data, error } = await supabase.rpc("get_bidang_tanah_geojson");
