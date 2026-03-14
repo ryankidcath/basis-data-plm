@@ -71,6 +71,69 @@ export async function getOrCreateThreadForPermohonan(
 }
 
 /**
+ * Returns the Discord thread channel ID for the given kode KJSB.
+ * Lists active threads, then archived/public; if not found, creates a new thread.
+ * No DB lookup — used before permohonan exists.
+ * Returns null if Discord is not configured.
+ */
+export async function getOrCreateThreadByKode(kodeKjsb: string): Promise<string | null> {
+  const { token, channelId } = getConfig();
+  if (!token || !channelId) {
+    console.warn("[Discord] DISCORD_BOT_TOKEN atau DISCORD_CHANNEL_ID tidak diset; thread tidak dibuat.");
+    return null;
+  }
+
+  const searchName = kodeKjsb.trim().slice(0, 100);
+  if (!searchName) return null;
+
+  const headers = { Authorization: `Bot ${token}` };
+
+  // 1. Search active threads
+  const activeRes = await fetch(
+    `${DISCORD_API}/channels/${channelId}/threads/active`,
+    { headers }
+  );
+  if (activeRes.ok) {
+    const data = (await activeRes.json()) as { threads: { id: string; name: string }[] };
+    const found = data.threads?.find((t) => t.name === searchName);
+    if (found) return found.id;
+  }
+
+  // 2. Search archived/public threads
+  const archivedRes = await fetch(
+    `${DISCORD_API}/channels/${channelId}/threads/archived/public?limit=100`,
+    { headers }
+  );
+  if (archivedRes.ok) {
+    const data = (await archivedRes.json()) as { threads: { id: string; name: string }[] };
+    const found = data.threads?.find((t) => t.name === searchName);
+    if (found) return found.id;
+  }
+
+  // 3. Create new thread
+  const createRes = await fetch(`${DISCORD_API}/channels/${channelId}/threads`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: searchName,
+      message: { content: `Berkas ${searchName}` },
+    }),
+  });
+
+  if (!createRes.ok) {
+    const err = await createRes.text();
+    console.error("[Discord] create thread by kode gagal:", createRes.status, err, "| kodeKjsb:", searchName);
+    return null;
+  }
+
+  const thread = (await createRes.json()) as { id: string };
+  return thread.id;
+}
+
+/**
  * Sends a file to a Discord thread (channel). No-op if token missing.
  */
 export async function sendFileToThread(

@@ -17,6 +17,7 @@ import { PetaBidangTanahForm } from "./forms/PetaBidangTanahForm";
 import { TanggalPenyelesaianForm } from "./forms/TanggalPenyelesaianForm";
 import { Card } from "@/components/ui/Card";
 import GeoJSONUpload from "./GeoJSONUpload";
+import PdfUpload from "./PdfUpload";
 
 const TABS = [
   { id: "1", label: "Administrasi" },
@@ -80,6 +81,9 @@ export default function WorkflowForms({
           <div className="flex-1 min-w-0 overflow-y-auto p-5 bg-navy-50/30">
             {activeTab === "1" && (
               <div className="space-y-4">
+                <Card title="Upload Berkas Permohonan">
+                  <PdfUpload permohonanId={permohonanId} onSaved={onSaved} embedded />
+                </Card>
                 <PermohonanForm permohonanId={permohonanId} onSaved={onSaved} refreshCount={refreshCount} />
                 <PemohonForm permohonanId={permohonanId} onSaved={onSaved} />
                 <KlienForm permohonanId={permohonanId} onSaved={onSaved} />

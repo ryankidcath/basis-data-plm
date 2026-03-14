@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Pemohon, Klien } from "@/lib/types";
 import type { PenggunaanTanah1 } from "@/lib/types";
@@ -48,6 +48,13 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
 
   const [selectedKecamatan, setSelectedKecamatan] = useState("");
   const [selectedDesa, setSelectedDesa] = useState("");
+
+  const [kodeKjsb, setKodeKjsb] = useState("");
+  const [pdfUploading, setPdfUploading] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+  const [discordThreadId, setDiscordThreadId] = useState<string | null>(null);
+  const [lokasiTanah, setLokasiTanah] = useState("");
+  const pdfFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -117,6 +124,46 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
 
   const KODE_KJSB_REGEX = /^BKS-\d{4}-\d{1,4}$/;
 
+  async function handlePdfUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const trimmed = kodeKjsb.trim();
+    if (!KODE_KJSB_REGEX.test(trimmed)) {
+      setPdfError("Isi Kode KJSB terlebih dahulu (format BKS-YYYY-XXXX).");
+      if (pdfFileInputRef.current) pdfFileInputRef.current.value = "";
+      return;
+    }
+    setPdfUploading(true);
+    setPdfError(null);
+    try {
+      const formData = new FormData();
+      formData.set("file", file);
+      formData.set("kodeKjsb", trimmed);
+      const res = await fetch("/api/upload-pdf-extract", { method: "POST", body: formData });
+      const text = await res.text();
+      let data: { error?: string; discordThreadId?: string };
+      try {
+        data = JSON.parse(text);
+      } catch {
+        setPdfError("Server mengembalikan respons tidak valid. Periksa log server atau coba lagi.");
+        setPdfUploading(false);
+        if (pdfFileInputRef.current) pdfFileInputRef.current.value = "";
+        return;
+      }
+      if (!res.ok) {
+        setPdfError(data.error ?? "Gagal mengunggah PDF.");
+        setPdfUploading(false);
+        if (pdfFileInputRef.current) pdfFileInputRef.current.value = "";
+        return;
+      }
+      setDiscordThreadId(data.discordThreadId ?? null);
+    } catch (err) {
+      setPdfError(err instanceof Error ? err.message : "Gagal mengunggah PDF.");
+    }
+    setPdfUploading(false);
+    if (pdfFileInputRef.current) pdfFileInputRef.current.value = "";
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selectedPemohonId) {
@@ -124,26 +171,30 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
       return;
     }
     const form = e.currentTarget;
-    const kodeKjsb = (form.elements.namedItem("kode_kjsb") as HTMLInputElement).value.trim();
-    if (!KODE_KJSB_REGEX.test(kodeKjsb)) {
+    const kodeVal = kodeKjsb.trim();
+    if (!KODE_KJSB_REGEX.test(kodeVal)) {
       setError("Kode KJSB harus berformat BKS-YYYY-XXXX (contoh: BKS-2024-0001).");
       return;
     }
     setSaving(true);
     setError(null);
-    const { data, error: err } = await supabase.from("permohonan").insert({
-      kode_kjsb: kodeKjsb,
+    const insertPayload: Record<string, unknown> = {
+      kode_kjsb: kodeVal,
       pemohon_id: selectedPemohonId,
       klien_id: selectedKlienId || null,
       tanggal_permohonan: (form.elements.namedItem("tanggal_permohonan") as HTMLInputElement).value,
-      luas_permohonan: Number((form.elements.namedItem("luas_permohonan") as HTMLInputElement).value) || 0,
+      luas_permohonan: Number((form.elements.namedItem("luas_permohonan") as HTMLInputElement)?.value) || 0,
       penggunaan_tanah_1: (form.elements.namedItem("penggunaan_tanah_1") as HTMLSelectElement).value as PenggunaanTanah1,
-      lokasi_tanah: (form.elements.namedItem("lokasi_tanah") as HTMLInputElement).value.trim() || null,
+      lokasi_tanah: lokasiTanah.trim() || null,
       kota_kabupaten: (form.elements.namedItem("kota_kabupaten") as HTMLSelectElement).value?.trim() || null,
       kecamatan: (form.elements.namedItem("kecamatan") as HTMLSelectElement).value?.trim() || null,
       kelurahan_desa: (form.elements.namedItem("kelurahan_desa") as HTMLSelectElement).value?.trim() || null,
       status_permohonan: "Pendaftaran",
-    }).select("id").single();
+    };
+    if (discordThreadId) {
+      insertPayload.discord_thread_id = discordThreadId;
+    }
+    const { data, error: err } = await supabase.from("permohonan").insert(insertPayload).select("id").single();
     setSaving(false);
     if (err) {
       setError(err.message);
@@ -151,11 +202,13 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
     }
     if (data?.id) {
       onCreated(data.id);
-      fetch("/api/discord/create-thread", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ permohonanId: data.id }),
-      }).catch(() => {});
+      if (!discordThreadId) {
+        fetch("/api/discord/create-thread", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ permohonanId: data.id }),
+        }).catch(() => {});
+      }
     }
   }
 
@@ -168,7 +221,14 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div>
           <label className="block text-sm text-navy-600 mb-1">Kode KJSB *</label>
-          <input name="kode_kjsb" required className="w-full px-3 py-2 border border-navy-300 rounded" placeholder="Contoh: BKS-2024-0001" />
+          <input
+            name="kode_kjsb"
+            required
+            value={kodeKjsb}
+            onChange={(e) => setKodeKjsb(e.target.value)}
+            className="w-full px-3 py-2 border border-navy-300 rounded"
+            placeholder="Contoh: BKS-2024-0001"
+          />
         </div>
 
         <div>
@@ -309,7 +369,12 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
         </div>
         <div>
           <label className="block text-sm text-navy-600 mb-1">Lokasi Tanah</label>
-          <input name="lokasi_tanah" className="w-full px-3 py-2 border border-navy-300 rounded" />
+          <input
+            name="lokasi_tanah"
+            value={lokasiTanah}
+            onChange={(e) => setLokasiTanah(e.target.value)}
+            className="w-full px-3 py-2 border border-navy-300 rounded"
+          />
         </div>
         <div className="grid grid-cols-1 gap-3">
           <div>
@@ -350,6 +415,20 @@ export function TambahPermohonanForm({ onCreated, refreshCount = 0 }: TambahPerm
               ))}
             </select>
           </div>
+        </div>
+        <div className="p-3 border border-navy-200 rounded-lg bg-navy-50/50">
+          <p className="text-xs font-medium text-navy-600 mb-2">Upload Berkas PDF</p>
+          <p className="text-xs text-navy-500 mb-2">Isi Kode KJSB di atas, lalu pilih file PDF. Berkas akan dikirim ke Discord.</p>
+          {pdfError && <p className="text-sm text-red-600 mb-2">{pdfError}</p>}
+          <input
+            ref={pdfFileInputRef}
+            type="file"
+            accept=".pdf,application/pdf"
+            onChange={handlePdfUpload}
+            disabled={pdfUploading}
+            className="block w-full text-sm text-navy-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-navy-100 file:text-navy-800 file:font-medium"
+          />
+          {pdfUploading && <p className="mt-2 text-xs text-navy-500">Mengunggah...</p>}
         </div>
         <button type="submit" disabled={saving} className="px-4 py-2 bg-gold-500 text-white rounded hover:bg-gold-600 disabled:opacity-60 text-sm">
           {saving ? "Membuat..." : "Buat Permohonan"}
