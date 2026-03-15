@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Permohonan, Pemohon } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 
 interface PemohonFormProps {
   permohonanId: string;
@@ -54,38 +54,40 @@ export function PemohonForm({ permohonanId, onSaved }: PemohonFormProps) {
   if (loading) return null;
   if (!permohonan?.pemohon_id || !pemohon) {
     return (
-      <Card title="Pemohon">
-        <p className="text-sm text-navy-500">Pilih pemohon di form Permohonan terlebih dahulu.</p>
-      </Card>
+      <section className={FORM_SECTION}>
+        <h3 className={FORM_SECTION_HEADING}>Pemohon</h3>
+        <p className="text-sm text-slate-500">Pilih pemohon di form Permohonan terlebih dahulu.</p>
+      </section>
     );
   }
 
   return (
-    <Card title="Pemohon">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Pemohon</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Nama</label>
-          <input name="nama" defaultValue={pemohon.nama} required className="w-full px-3 py-2 border border-navy-300 rounded" />
+          <label className={FORM_LABEL}>Nama</label>
+          <input name="nama" defaultValue={pemohon.nama} required className={FORM_INPUT} />
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">No. HP</label>
-            <input name="no_hp" defaultValue={pemohon.no_hp ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>No. HP</label>
+            <input name="no_hp" defaultValue={pemohon.no_hp ?? ""} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">NIK</label>
-            <input name="nik" defaultValue={pemohon.nik ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>NIK</label>
+            <input name="nik" defaultValue={pemohon.nik ?? ""} className={FORM_INPUT} />
           </div>
         </div>
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Alamat</label>
-          <input name="alamat" defaultValue={pemohon.alamat ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+          <label className={FORM_LABEL}>Alamat</label>
+          <input name="alamat" defaultValue={pemohon.alamat ?? ""} className={FORM_INPUT} />
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
-    </Card>
+    </section>
   );
 }

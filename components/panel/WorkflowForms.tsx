@@ -15,17 +15,11 @@ import { BidangTanahForm } from "./forms/BidangTanahForm";
 import { GambarUkurForm } from "./forms/GambarUkurForm";
 import { PetaBidangTanahForm } from "./forms/PetaBidangTanahForm";
 import { TanggalPenyelesaianForm } from "./forms/TanggalPenyelesaianForm";
-import { Card } from "@/components/ui/Card";
 import GeoJSONUpload from "./GeoJSONUpload";
 import PdfUpload from "./PdfUpload";
 
-const TABS = [
-  { id: "1", label: "Administrasi" },
-  { id: "2", label: "Informasi Spasial" },
-  { id: "3", label: "Surat Tugas" },
-  { id: "4", label: "Legalisasi GU" },
-  { id: "5", label: "NIB, GU, dan PBT" },
-] as const;
+const SECTION_CLASS = "border-t border-slate-200 pt-6 mt-6 first:border-t-0 first:pt-0 first:mt-0";
+const SECTION_HEADING = "text-sm font-bold text-slate-900 mb-4";
 
 interface WorkflowFormsProps {
   permohonanId: string | null;
@@ -40,91 +34,56 @@ export default function WorkflowForms({
   onPermohonanCreated,
   refreshCount = 0,
 }: WorkflowFormsProps) {
-  const [activeTab, setActiveTab] = useState<string>("1");
-
   const noSelection = !permohonanId;
 
   return (
-    <div className="flex flex-col bg-white border-t border-navy-200 min-h-0 flex-1">
+    <div className="flex flex-col min-h-0 flex-1">
       {noSelection ? (
         <div className="flex-1 overflow-y-auto p-5">
           <div className="space-y-4">
             {onPermohonanCreated && (
               <TambahPermohonanForm onCreated={onPermohonanCreated} refreshCount={refreshCount} />
             )}
-            <p className="text-navy-500 text-sm">
+            <p className="text-slate-500 text-sm">
               Atau pilih satu bidang di peta untuk mengisi data per tahapan.
             </p>
           </div>
         </div>
       ) : (
-        <div className="flex flex-1 min-h-0 w-full min-w-0">
-          <aside
-            aria-label="Tahap"
-            className="flex flex-col flex-shrink-0 w-40 min-w-[7.5rem] border-r-2 border-navy-200 bg-white overflow-y-auto"
-          >
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={`block w-full text-left px-3 py-2.5 text-sm font-medium transition-colors border-l-4 ${
-                  activeTab === tab.id
-                    ? "text-gold-600 bg-navy-100 border-gold-500"
-                    : "border-transparent text-navy-700 hover:bg-navy-50 hover:text-navy-900"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </aside>
-          <div className="flex-1 min-w-0 overflow-y-auto p-5 bg-navy-50/30">
-            {activeTab === "1" && (
-              <div className="space-y-4">
-                <Card title="Upload Berkas Permohonan">
-                  <PdfUpload permohonanId={permohonanId} onSaved={onSaved} embedded />
-                </Card>
-                <PermohonanForm permohonanId={permohonanId} onSaved={onSaved} refreshCount={refreshCount} />
-                <PemohonForm permohonanId={permohonanId} onSaved={onSaved} />
-                <KlienForm permohonanId={permohonanId} onSaved={onSaved} />
-                <AdministrasiForm permohonanId={permohonanId} onSaved={onSaved} />
-                <KeuanganForm permohonanId={permohonanId} onSaved={onSaved} />
+        <div className="flex-1 min-h-0 overflow-y-auto p-5 pb-24">
+          <div className="space-y-8">
+            {/* Administrasi: Upload + Permohonan + Pemohon + Klien + Administrasi + Keuangan */}
+            <section className={SECTION_CLASS}>
+              <h3 className={SECTION_HEADING}>Upload Berkas Permohonan</h3>
+              <PdfUpload permohonanId={permohonanId} onSaved={onSaved} embedded />
+            </section>
+            <PermohonanForm permohonanId={permohonanId} onSaved={onSaved} refreshCount={refreshCount} />
+            <PemohonForm permohonanId={permohonanId} onSaved={onSaved} />
+            <KlienForm permohonanId={permohonanId} onSaved={onSaved} />
+            <AdministrasiForm permohonanId={permohonanId} onSaved={onSaved} />
+            <KeuanganForm permohonanId={permohonanId} onSaved={onSaved} />
+
+            {/* Informasi Spasial */}
+            <InformasiSpasialForm permohonanId={permohonanId} onSaved={onSaved} />
+
+            {/* Surat Tugas & Pengukuran */}
+            <SuratTugasForm permohonanId={permohonanId} onSaved={onSaved} />
+            <PengukuranForm permohonanId={permohonanId} onSaved={onSaved} refreshCount={refreshCount} />
+
+            {/* Legalisasi GU */}
+            <LegalisasiGuForm permohonanId={permohonanId} onSaved={onSaved} />
+
+            {/* NIB, GU, PBT */}
+            <section className={SECTION_CLASS}>
+              <h3 className={SECTION_HEADING}>Bidang Tanah (NIB) & GeoJSON</h3>
+              <GeoJSONUpload permohonanId={permohonanId} onSaved={onSaved} embedded />
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <BidangTanahForm permohonanId={permohonanId} onSaved={onSaved} embedded refreshCount={refreshCount} />
               </div>
-            )}
-            {activeTab === "2" && (
-              <InformasiSpasialForm
-                permohonanId={permohonanId}
-                onSaved={onSaved}
-              />
-            )}
-            {activeTab === "3" && (
-              <div className="space-y-4">
-                <SuratTugasForm permohonanId={permohonanId} onSaved={onSaved} />
-                <PengukuranForm permohonanId={permohonanId} onSaved={onSaved} refreshCount={refreshCount} />
-              </div>
-            )}
-            {activeTab === "4" && (
-              <LegalisasiGuForm permohonanId={permohonanId} onSaved={onSaved} />
-            )}
-            {activeTab === "5" && (
-              <div className="space-y-4">
-                <Card title="Bidang Tanah (NIB) & GeoJSON">
-                  <GeoJSONUpload permohonanId={permohonanId} onSaved={onSaved} embedded />
-                  <div className="mt-4 pt-4 border-t border-navy-200">
-                    <BidangTanahForm permohonanId={permohonanId} onSaved={onSaved} embedded refreshCount={refreshCount} />
-                  </div>
-                </Card>
-                <GambarUkurForm permohonanId={permohonanId} onSaved={onSaved} />
-                <PetaBidangTanahForm
-                  permohonanId={permohonanId}
-                  onSaved={onSaved}
-                />
-                <TanggalPenyelesaianForm
-                  permohonanId={permohonanId}
-                  onSaved={onSaved}
-                />
-              </div>
-            )}
+            </section>
+            <GambarUkurForm permohonanId={permohonanId} onSaved={onSaved} />
+            <PetaBidangTanahForm permohonanId={permohonanId} onSaved={onSaved} />
+            <TanggalPenyelesaianForm permohonanId={permohonanId} onSaved={onSaved} />
           </div>
         </div>
       )}

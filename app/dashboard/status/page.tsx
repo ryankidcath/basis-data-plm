@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
@@ -11,6 +12,7 @@ import {
   type PermohonanListItem,
 } from "@/lib/supabase/queries";
 import { STATUS_PERMOHONAN_ORDER } from "@/lib/status-permohonan";
+import { Clipboard, CheckCircle, Activity, Eye } from "lucide-react";
 
 /** Pastikan 14 status tampil; RPC mungkin tidak return status dengan count 0 */
 function fillAggregation(data: StatusAggregationRow[]): StatusAggregationRow[] {
@@ -20,6 +22,9 @@ function fillAggregation(data: StatusAggregationRow[]): StatusAggregationRow[] {
     count: byStatus.get(s) ?? 0,
   }));
 }
+
+const INPUT_CLASS =
+  "px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all outline-none";
 
 export default function DashboardStatusPage() {
   const router = useRouter();
@@ -81,34 +86,37 @@ export default function DashboardStatusPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-navy-50">
-      <header className="flex-shrink-0 h-14 bg-navy-900 text-white flex items-center justify-between px-5 shadow-md">
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      {/* Navbar: putih, border-b tipis */}
+      <header className="flex-shrink-0 h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shadow-sm">
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="Logo" className="h-9 w-auto object-contain rounded-sm" />
-          <h1 className="text-lg font-serif font-semibold tracking-tight">
+          <Image src="/logo.png" alt="Logo" width={36} height={36} className="object-contain rounded-sm" />
+          <h1 className="text-lg font-semibold tracking-tight text-slate-900">
             KJSB Benning dan Rekan
           </h1>
         </div>
-        <div className="flex items-center gap-5">
-          <span className="text-navy-200 text-sm">Dashboard Status Berkas</span>
+        <div className="flex items-center gap-1">
+          <span className="text-indigo-600 text-sm font-medium px-3 py-2 rounded-lg bg-indigo-50">
+            Dashboard
+          </span>
           <Link
             href="/dashboard"
-            className="text-gold-400 hover:text-gold-300 text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
           >
-            Dashboard
+            Peta
           </Link>
           <a
             href="/api/export/permohonan?format=csv"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gold-400 hover:text-gold-300 text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
           >
             Ekspor data
           </a>
           <button
             type="button"
             onClick={handleSignOut}
-            className="text-gold-400 hover:text-gold-300 text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
           >
             Keluar
           </button>
@@ -116,40 +124,55 @@ export default function DashboardStatusPage() {
       </header>
 
       <main className="flex-1 p-6 max-w-6xl mx-auto w-full space-y-6">
-        <h2 className="text-xl font-serif font-semibold text-navy-900">
+        <h2 className="text-xl font-semibold text-slate-900">
           Status Permohonan
         </h2>
 
         {aggregationError && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
+          <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-800 text-sm">
             {aggregationError}
           </div>
         )}
 
         {aggregation && (
           <>
-            {/* Ringkasan cepat */}
+            {/* Hero Stats: compact, icon Lucide, warna angka */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-white border border-navy-200 rounded-lg p-4 shadow-sm">
-                <p className="text-navy-500 text-sm">Total</p>
-                <p className="text-2xl font-semibold text-navy-900">{total}</p>
+              <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex items-center gap-4">
+                <div className="p-2.5 bg-slate-100 rounded-xl">
+                  <Clipboard className="w-5 h-5 text-slate-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-slate-500">Total</p>
+                  <p className="text-2xl font-bold text-slate-900">{total}</p>
+                </div>
               </div>
-              <div className="bg-white border border-navy-200 rounded-lg p-4 shadow-sm">
-                <p className="text-navy-500 text-sm">Selesai</p>
-                <p className="text-2xl font-semibold text-navy-900">{selesaiCount}</p>
+              <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex items-center gap-4">
+                <div className="p-2.5 bg-emerald-50 rounded-xl">
+                  <CheckCircle className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-slate-500">Selesai</p>
+                  <p className="text-2xl font-bold text-emerald-600">{selesaiCount}</p>
+                </div>
               </div>
-              <div className="bg-white border border-navy-200 rounded-lg p-4 shadow-sm">
-                <p className="text-navy-500 text-sm">Dalam proses</p>
-                <p className="text-2xl font-semibold text-navy-900">{dalamProses}</p>
+              <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex items-center gap-4">
+                <div className="p-2.5 bg-amber-50 rounded-xl">
+                  <Activity className="w-5 h-5 text-amber-600" />
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-slate-500">Dalam proses</p>
+                  <p className="text-2xl font-bold text-amber-600">{dalamProses}</p>
+                </div>
               </div>
             </div>
 
-            {/* Chart agregat (bar) */}
-            <section className="bg-white border border-navy-200 rounded-lg p-4 shadow-sm">
-              <h3 className="text-sm font-medium text-navy-700 mb-4">
+            {/* Progress Section: kartu per status */}
+            <section className="space-y-3">
+              <h3 className="text-sm font-semibold text-slate-700">
                 Jumlah per status
               </h3>
-              <div className="space-y-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {aggregation.map((row) => {
                   const maxCount = Math.max(
                     ...aggregation.map((r) => r.count),
@@ -157,45 +180,44 @@ export default function DashboardStatusPage() {
                   );
                   const pct = maxCount > 0 ? (row.count / maxCount) * 100 : 0;
                   const isSelected = selectedStatus === row.status_permohonan;
+                  const barBg = row.count === 0 ? "bg-slate-100" : "bg-indigo-500/60";
                   return (
-                    <div
+                    <button
                       key={row.status_permohonan}
-                      className="flex items-center gap-3 min-w-0"
+                      type="button"
+                      onClick={() => setSelectedStatus(row.status_permohonan)}
+                      className={`text-left p-3 rounded-2xl border transition-all ${
+                        isSelected
+                          ? "border-indigo-300 bg-indigo-50/50 shadow-sm"
+                          : "border-slate-100 bg-white hover:border-slate-200 hover:bg-slate-50/50"
+                      }`}
                     >
-                      <span
-                        className="w-48 shrink-0 text-sm text-navy-700"
-                        title={row.status_permohonan}
-                      >
-                        {row.status_permohonan}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setSelectedStatus(row.status_permohonan)
-                        }
-                        className={`flex-1 min-w-0 h-6 rounded flex items-center justify-end pr-2 text-xs font-medium transition-colors shrink ${
-                          isSelected
-                            ? "bg-gold-500 text-white"
-                            : "bg-navy-100 hover:bg-navy-200 text-navy-700"
-                        }`}
-                        style={{ width: `${Math.max(pct, 4)}%` }}
-                      >
-                        {row.count}
-                      </button>
-                    </div>
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <span className="text-xs font-medium text-slate-700 truncate" title={row.status_permohonan}>
+                          {row.status_permohonan}
+                        </span>
+                        <span className="text-sm font-bold text-slate-900 shrink-0">{row.count}</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all ${barBg}`}
+                          style={{ width: `${Math.max(pct, 2)}%` }}
+                        />
+                      </div>
+                    </button>
                   );
                 })}
               </div>
             </section>
 
             {/* Filter & list */}
-            <section className="bg-white border border-navy-200 rounded-lg p-4 shadow-sm">
-              <h3 className="text-sm font-medium text-navy-700 mb-4">
+            <section className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+              <h3 className="text-sm font-semibold text-slate-700 mb-4">
                 Daftar permohonan per status
               </h3>
-              <div className="flex flex-wrap items-center gap-4 mb-4">
+              <div className="flex flex-wrap items-end gap-4 mb-4">
                 <div>
-                  <label className="block text-xs text-navy-500 mb-1">
+                  <label className="block text-xs font-medium text-slate-500 mb-1">
                     Status terpilih
                   </label>
                   <select
@@ -205,7 +227,7 @@ export default function DashboardStatusPage() {
                         e.target.value ? e.target.value : null
                       )
                     }
-                    className="px-3 py-2 border border-navy-300 rounded-lg text-sm focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
+                    className={INPUT_CLASS}
                   >
                     <option value="">— Pilih status —</option>
                     {STATUS_PERMOHONAN_ORDER.map((s) => (
@@ -217,7 +239,7 @@ export default function DashboardStatusPage() {
                 </div>
                 {selectedStatus && (
                   <div>
-                    <label className="block text-xs text-navy-500 mb-1">
+                    <label className="block text-xs font-medium text-slate-500 mb-1">
                       Cari kode KJSB
                     </label>
                     <input
@@ -225,54 +247,53 @@ export default function DashboardStatusPage() {
                       value={kodeSearch}
                       onChange={(e) => setKodeSearch(e.target.value)}
                       placeholder="Ketik sebagian kode..."
-                      className="px-3 py-2 border border-navy-300 rounded-lg text-sm w-48 focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
+                      className={`${INPUT_CLASS} w-48`}
                     />
                   </div>
                 )}
               </div>
 
               {listError && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-800 text-sm">
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
                   {listError}
                 </div>
               )}
 
               {listLoading ? (
-                <div className="py-8 text-center text-navy-500 text-sm">
+                <div className="py-12 text-center text-slate-500 text-sm">
                   Memuat...
                 </div>
               ) : !selectedStatus ? (
-                <p className="py-6 text-navy-500 text-sm text-center">
-                  Pilih status di atas atau klik bar untuk melihat daftar
-                  permohonan.
+                <p className="py-12 text-slate-500 text-sm text-center">
+                  Pilih status di atas atau klik kartu untuk melihat daftar permohonan.
                 </p>
               ) : list.length === 0 ? (
-                <p className="py-6 text-navy-500 text-sm text-center">
+                <p className="py-12 text-slate-500 text-sm text-center">
                   Tidak ada permohonan dengan status ini.
                   {kodeSearch.trim() &&
                     " Coba ubah atau hapus filter kode KJSB."}
                 </p>
               ) : (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto rounded-xl border border-slate-100">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-navy-200">
-                        <th className="text-left py-2 px-3 text-navy-600 font-medium">
+                      <tr className="bg-slate-50">
+                        <th className="text-left py-4 px-4 text-slate-600 font-semibold">
                           Kode KJSB
                         </th>
-                        <th className="text-left py-2 px-3 text-navy-600 font-medium">
+                        <th className="text-left py-4 px-4 text-slate-600 font-semibold">
                           Tanggal
                         </th>
-                        <th className="text-left py-2 px-3 text-navy-600 font-medium">
+                        <th className="text-left py-4 px-4 text-slate-600 font-semibold">
                           Status
                         </th>
-                        <th className="text-left py-2 px-3 text-navy-600 font-medium">
+                        <th className="text-left py-4 px-4 text-slate-600 font-semibold">
                           Lokasi
                         </th>
-                        <th className="text-left py-2 px-3 text-navy-600 font-medium">
+                        <th className="text-left py-4 px-4 text-slate-600 font-semibold">
                           Pemohon
                         </th>
-                        <th className="text-left py-2 px-3 text-navy-600 font-medium">
+                        <th className="text-left py-4 px-4 text-slate-600 font-semibold">
                           Aksi
                         </th>
                       </tr>
@@ -281,29 +302,30 @@ export default function DashboardStatusPage() {
                       {list.map((p) => (
                         <tr
                           key={p.id}
-                          className="border-b border-navy-100 hover:bg-navy-50"
+                          className="border-t border-slate-100 hover:bg-slate-50/50 transition-colors"
                         >
-                          <td className="py-2 px-3 text-navy-800 font-mono">
+                          <td className="py-4 px-4 font-bold text-slate-900 font-mono">
                             {p.kode_kjsb}
                           </td>
-                          <td className="py-2 px-3 text-navy-700">
+                          <td className="py-4 px-4 text-slate-500">
                             {p.tanggal_permohonan}
                           </td>
-                          <td className="py-2 px-3 text-navy-700">
+                          <td className="py-4 px-4 text-slate-500">
                             {p.status_permohonan}
                           </td>
-                          <td className="py-2 px-3 text-navy-700 max-w-[12rem] truncate">
+                          <td className="py-4 px-4 text-slate-500 max-w-[12rem] truncate">
                             {p.lokasi_tanah || "—"}
                           </td>
-                          <td className="py-2 px-3 text-navy-700">
+                          <td className="py-4 px-4 text-slate-500">
                             {p.pemohon?.nama ?? "—"}
                           </td>
-                          <td className="py-2 px-3">
+                          <td className="py-4 px-4">
                             <Link
                               href={`/dashboard?highlight=${p.id}`}
-                              className="text-gold-600 hover:text-gold-700"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-slate-700 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
                             >
-                              Lihat
+                              <Eye className="w-4 h-4" />
+                              Detail
                             </Link>
                           </td>
                         </tr>
@@ -317,7 +339,7 @@ export default function DashboardStatusPage() {
         )}
 
         {!aggregation && !aggregationError && (
-          <div className="py-12 text-center text-navy-500 text-sm">
+          <div className="py-16 text-center text-slate-500 text-sm">
             Memuat data...
           </div>
         )}

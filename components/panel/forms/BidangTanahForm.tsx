@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { BidangTanah } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_BUTTON } from "@/lib/formStyles";
 import { formatLuasM2 } from "@/lib/format";
 
 interface BidangTanahFormProps {
@@ -119,31 +119,31 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
   const content = (
     <>
       {embedded && (
-        <p className="text-xs text-navy-500 mb-3">Upload GeoJSON lalu isi NIB dan simpan, atau isi NIB dulu lalu upload GeoJSON.</p>
+        <p className="text-xs text-slate-500 mb-3">Upload GeoJSON lalu isi NIB dan simpan, atau isi NIB dulu lalu upload GeoJSON.</p>
       )}
-      <form onSubmit={handleAdd} className="space-y-3">
+      <form onSubmit={handleAdd} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">NIB</label>
-            <input value={nib} onChange={(e) => setNib(e.target.value)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>NIB</label>
+            <input value={nib} onChange={(e) => setNib(e.target.value)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal NIB</label>
-            <input type="date" value={tanggalNib} onChange={(e) => setTanggalNib(e.target.value)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal NIB</label>
+            <input type="date" value={tanggalNib} onChange={(e) => setTanggalNib(e.target.value)} className={FORM_INPUT} />
           </div>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menambah..." : "Simpan"}
         </button>
       </form>
       {!embedded && (
-        <p className="mt-2 text-xs text-navy-500">Gunakan Upload GeoJSON di bawah untuk menambah/ubah geometri.</p>
+        <p className="mt-2 text-xs text-slate-500">Gunakan Upload GeoJSON di bawah untuk menambah/ubah geometri.</p>
       )}
       {rows.length > 0 && (
         <ul className="mt-4 space-y-2 text-sm">
           {rows.map((b) => (
-            <li key={b.id} className="flex justify-between items-center py-2 border-b border-navy-100">
+            <li key={b.id} className="flex justify-between items-center py-2 border-b border-slate-100">
               {editingId === b.id ? (
                 <>
                   <input
@@ -177,10 +177,10 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
                 <>
                   <span>NIB: {b.nib || "–"} — Luas: {formatLuasM2(b.luas_otomatis, true)}</span>
                   <span>
-                    <button type="button" onClick={() => setEditingId(b.id)} className="text-gold-600 hover:underline text-xs mr-2">
+                    <button type="button" onClick={() => setEditingId(b.id)} className="text-indigo-600 hover:underline text-xs mr-2">
                       Ubah
                     </button>
-                    <button type="button" onClick={() => handleDelete(b.id)} className="text-red-600 hover:underline text-xs">
+                    <button type="button" onClick={() => handleDelete(b.id)} className="text-slate-500 hover:text-red-600 text-xs">
                       Hapus
                     </button>
                   </span>
@@ -193,5 +193,5 @@ export function BidangTanahForm({ permohonanId, onSaved, embedded = false, refre
     </>
   );
 
-  return embedded ? content : <Card title="Bidang Tanah (NIB)">{content}</Card>;
+  return content;
 }

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { PetaBidangTanah } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 
 interface PetaBidangTanahFormProps {
   permohonanId: string;
@@ -57,31 +57,32 @@ export function PetaBidangTanahForm({ permohonanId, onSaved }: PetaBidangTanahFo
   if (loading) return null;
 
   return (
-    <Card title="Peta Bidang Tanah (PBT)">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Peta Bidang Tanah (PBT)</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">No. PBT</label>
-            <input name="no_pbt" defaultValue={row?.no_pbt ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>No. PBT</label>
+            <input name="no_pbt" defaultValue={row?.no_pbt ?? ""} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal PBT</label>
-            <input type="date" name="tanggal_pbt" defaultValue={row?.tanggal_pbt?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal PBT</label>
+            <input type="date" name="tanggal_pbt" defaultValue={row?.tanggal_pbt?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal TTE</label>
-            <input type="date" name="tanggal_tte_pbt" defaultValue={row?.tanggal_tte_pbt?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal TTE</label>
+            <input type="date" name="tanggal_tte_pbt" defaultValue={row?.tanggal_tte_pbt?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Upload</label>
-            <input type="date" name="tanggal_upload_pbt_tte" defaultValue={row?.tanggal_upload_pbt_tte?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Upload</label>
+            <input type="date" name="tanggal_upload_pbt_tte" defaultValue={row?.tanggal_upload_pbt_tte?.slice(0, 10)} className={FORM_INPUT} />
           </div>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
-    </Card>
+    </section>
   );
 }

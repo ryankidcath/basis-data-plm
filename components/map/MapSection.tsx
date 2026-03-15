@@ -31,12 +31,12 @@ export default function MapSection({ onParcelClick, fitToPermohonanId, refreshTr
   return (
     <div className="h-full w-full flex flex-col">
       {loading && (
-        <div className="absolute top-4 left-4 z-[1000] bg-white/95 px-3 py-2 rounded-lg shadow text-sm text-navy-700">
+        <div className="absolute top-4 left-4 z-[500] bg-white/95 backdrop-blur-sm px-3 py-2 rounded-xl shadow-lg text-sm text-slate-700">
           Memuat peta...
         </div>
       )}
       {error && (
-        <div className="absolute top-4 left-4 z-[1000] bg-red-50 border border-red-200 px-3 py-2 rounded-lg shadow text-sm text-red-700">
+        <div className="absolute top-4 left-4 z-[500] bg-red-50 border border-red-200 px-3 py-2 rounded-xl shadow-lg text-sm text-red-700">
           {error}
         </div>
       )}

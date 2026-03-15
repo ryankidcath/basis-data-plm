@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { InformasiSpasial, InformasiSpasialNib } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 
 interface InformasiSpasialFormProps {
@@ -101,64 +101,65 @@ export function InformasiSpasialForm({ permohonanId, onSaved }: InformasiSpasial
   if (loading) return null;
 
   return (
-    <Card title="Informasi Spasial">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Informasi Spasial</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">No. Berkas</label>
-            <input name="no_berkas" defaultValue={row?.no_berkas ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>No. Berkas</label>
+            <input name="no_berkas" defaultValue={row?.no_berkas ?? ""} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Berkas</label>
-            <input type="date" name="tanggal_berkas" defaultValue={row?.tanggal_berkas?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Berkas</label>
+            <input type="date" name="tanggal_berkas" defaultValue={row?.tanggal_berkas?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal SPS</label>
-            <input type="date" name="tanggal_sps" defaultValue={row?.tanggal_sps?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal SPS</label>
+            <input type="date" name="tanggal_sps" defaultValue={row?.tanggal_sps?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Biaya</label>
-            <FormattedIntegerInput name="biaya" defaultValue={row?.biaya ?? 0} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Biaya</label>
+            <FormattedIntegerInput name="biaya" defaultValue={row?.biaya ?? 0} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Bayar SPS</label>
-            <input type="date" name="tanggal_bayar_sps" defaultValue={row?.tanggal_bayar_sps?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Bayar SPS</label>
+            <input type="date" name="tanggal_bayar_sps" defaultValue={row?.tanggal_bayar_sps?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Download Hasil</label>
-            <input type="date" name="tanggal_download_hasil" defaultValue={row?.tanggal_download_hasil?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Download Hasil</label>
+            <input type="date" name="tanggal_download_hasil" defaultValue={row?.tanggal_download_hasil?.slice(0, 10)} className={FORM_INPUT} />
           </div>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
 
-      <div className="mt-4 pt-4 border-t border-navy-200">
-        <h4 className="text-sm font-medium text-navy-700 mb-2">NIB Bidang Eksisting</h4>
+      <div className="mt-6 pt-4 border-t border-slate-200">
+        <h4 className="text-xs font-semibold text-slate-500 mb-2">NIB Bidang Eksisting</h4>
         {!row ? (
-          <p className="text-xs text-navy-500">Simpan informasi spasial di atas terlebih dahulu untuk menambah NIB.</p>
+          <p className="text-xs text-slate-500">Simpan informasi spasial di atas terlebih dahulu untuk menambah NIB.</p>
         ) : (
           <>
             {nibError && <p className="text-sm text-red-600 mb-2">{nibError}</p>}
             {!showAddNib ? (
-              <button type="button" onClick={() => setShowAddNib(true)} className="text-sm text-gold-600 hover:text-gold-700">
+              <button type="button" onClick={() => setShowAddNib(true)} className="text-sm text-indigo-600 hover:text-indigo-700">
                 + Tambah NIB
               </button>
             ) : (
-              <div className="space-y-2 p-2 border border-navy-200 rounded bg-navy-50/50">
+              <div className="space-y-2 p-3 border border-slate-200 rounded-lg bg-slate-50/50">
                 <input
                   value={addNibValue}
                   onChange={(e) => setAddNibValue(e.target.value)}
                   placeholder="NIB bidang eksisting"
-                  className="w-full px-3 py-2 border border-navy-300 rounded text-sm"
+                  className={FORM_INPUT}
                 />
                 <div className="flex gap-2">
-                  <button type="button" onClick={handleAddNib} disabled={addNibSaving || !addNibValue.trim()} className="px-3 py-1.5 bg-navy-800 text-white rounded text-sm">
+                  <button type="button" onClick={handleAddNib} disabled={addNibSaving || !addNibValue.trim()} className="px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700 disabled:opacity-60">
                     {addNibSaving ? "Menyimpan..." : "Simpan"}
                   </button>
-                  <button type="button" onClick={() => { setShowAddNib(false); setAddNibValue(""); setNibError(null); }} className="px-3 py-1.5 border border-navy-300 rounded text-sm">
+                  <button type="button" onClick={() => { setShowAddNib(false); setAddNibValue(""); setNibError(null); }} className="px-3 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">
                     Batal
                   </button>
                 </div>
@@ -167,9 +168,9 @@ export function InformasiSpasialForm({ permohonanId, onSaved }: InformasiSpasial
             {nibList.length > 0 && (
               <ul className="mt-2 space-y-1 text-sm">
                 {nibList.map((n) => (
-                  <li key={n.id} className="flex justify-between items-center py-1 border-b border-navy-100">
+                  <li key={n.id} className="flex justify-between items-center py-1 border-b border-slate-100">
                     <span>{n.nib_bidang_eksisting || "–"}</span>
-                    <button type="button" onClick={() => handleDeleteNib(n.id)} className="text-red-600 hover:underline text-xs">
+                    <button type="button" onClick={() => handleDeleteNib(n.id)} className="text-slate-500 hover:text-red-600 text-xs">
                       Hapus
                     </button>
                   </li>
@@ -179,6 +180,6 @@ export function InformasiSpasialForm({ permohonanId, onSaved }: InformasiSpasial
           </>
         )}
       </div>
-    </Card>
+    </section>
   );
 }

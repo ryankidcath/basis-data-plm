@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Permohonan, Pemohon, Klien } from "@/lib/types";
 import type { PenggunaanTanah1 } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 import { PENGGUNAAN_TANAH_1_LABELS } from "@/lib/format";
 import { KABUPATEN_CIREBON, KECAMATAN_LIST, getDesaByKecamatan } from "@/lib/wilayah";
@@ -92,61 +92,62 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
   if (loading || !permohonan) return null;
 
   return (
-    <Card title="Permohonan">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Permohonan</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Kode KJSB</label>
-          <input name="kode_kjsb" defaultValue={permohonan.kode_kjsb} required className="w-full px-3 py-2 border border-navy-300 rounded" placeholder="Contoh: BKS-2024-0001" />
+          <label className={FORM_LABEL}>Kode KJSB</label>
+          <input name="kode_kjsb" defaultValue={permohonan.kode_kjsb} required className={FORM_INPUT} placeholder="Contoh: BKS-2024-0001" />
         </div>
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Pemohon</label>
-          <select name="pemohon_id" defaultValue={permohonan.pemohon_id} required className="w-full px-3 py-2 border border-navy-300 rounded">
+          <label className={FORM_LABEL}>Pemohon</label>
+          <select name="pemohon_id" defaultValue={permohonan.pemohon_id} required className={FORM_INPUT}>
             {pemohonList.map((p) => (
               <option key={p.id} value={p.id}>{p.nama}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Klien (opsional)</label>
-          <select name="klien_id" defaultValue={permohonan.klien_id ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded">
+          <label className={FORM_LABEL}>Klien (opsional)</label>
+          <select name="klien_id" defaultValue={permohonan.klien_id ?? ""} className={FORM_INPUT}>
             <option value="">–</option>
             {klienList.map((k) => (
               <option key={k.id} value={k.id}>{k.nama}</option>
             ))}
           </select>
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Permohonan</label>
-            <input type="date" name="tanggal_permohonan" defaultValue={permohonan.tanggal_permohonan?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Permohonan</label>
+            <input type="date" name="tanggal_permohonan" defaultValue={permohonan.tanggal_permohonan?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Luas (m²)</label>
-            <FormattedIntegerInput name="luas_permohonan" defaultValue={permohonan.luas_permohonan} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Luas (m²)</label>
+            <FormattedIntegerInput name="luas_permohonan" defaultValue={permohonan.luas_permohonan} className={FORM_INPUT} />
           </div>
         </div>
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Penggunaan Tanah</label>
-          <select name="penggunaan_tanah_1" defaultValue={permohonan.penggunaan_tanah_1} className="w-full px-3 py-2 border border-navy-300 rounded">
+          <label className={FORM_LABEL}>Penggunaan Tanah</label>
+          <select name="penggunaan_tanah_1" defaultValue={permohonan.penggunaan_tanah_1} className={FORM_INPUT}>
             {PENGGUNAAN_TANAH_1.map((v) => (
               <option key={v} value={v}>{PENGGUNAAN_TANAH_1_LABELS[v] ?? v}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Lokasi Tanah</label>
-          <input name="lokasi_tanah" defaultValue={permohonan.lokasi_tanah ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+          <label className={FORM_LABEL}>Lokasi Tanah</label>
+          <input name="lokasi_tanah" defaultValue={permohonan.lokasi_tanah ?? ""} className={FORM_INPUT} />
         </div>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Kota/Kabupaten</label>
-            <select name="kota_kabupaten" className="w-full px-3 py-2 border border-navy-300 rounded" defaultValue={KABUPATEN_CIREBON}>
+            <label className={FORM_LABEL}>Kota/Kabupaten</label>
+            <select name="kota_kabupaten" className={FORM_INPUT} defaultValue={KABUPATEN_CIREBON}>
               <option value={KABUPATEN_CIREBON}>{KABUPATEN_CIREBON}</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Kecamatan</label>
+            <label className={FORM_LABEL}>Kecamatan</label>
             <select
               name="kecamatan"
               value={selectedKecamatan}
@@ -154,7 +155,7 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
                 setSelectedKecamatan(e.target.value);
                 setSelectedDesa("");
               }}
-              className="w-full px-3 py-2 border border-navy-300 rounded"
+              className={FORM_INPUT}
             >
               <option value="">– Pilih Kecamatan –</option>
               {permohonan.kecamatan?.trim() && !KECAMATAN_LIST.includes(permohonan.kecamatan.trim()) && (
@@ -166,13 +167,13 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
             </select>
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Kelurahan/Desa</label>
+            <label className={FORM_LABEL}>Kelurahan/Desa</label>
             <select
               name="kelurahan_desa"
               value={selectedDesa}
               onChange={(e) => setSelectedDesa(e.target.value)}
               disabled={!selectedKecamatan}
-              className="w-full px-3 py-2 border border-navy-300 rounded disabled:opacity-60"
+              className={`${FORM_INPUT} disabled:opacity-60`}
             >
               <option value="">{selectedKecamatan ? "– Pilih Desa –" : "– Pilih Kecamatan dulu –"}</option>
               {permohonan.kelurahan_desa?.trim() && selectedKecamatan && !getDesaByKecamatan(selectedKecamatan).includes(permohonan.kelurahan_desa.trim()) && (
@@ -185,16 +186,16 @@ export function PermohonanForm({ permohonanId, onSaved, refreshCount = 0 }: Perm
           </div>
         </div>
         <div>
-          <label className="block text-sm text-navy-600 mb-1">Status Permohonan</label>
-          <p className="px-3 py-2 bg-navy-100 text-navy-800 rounded border border-navy-200 text-sm">
+          <label className={FORM_LABEL}>Status Permohonan</label>
+          <p className="px-3 py-2 bg-slate-50 text-slate-800 rounded-lg border border-slate-200 text-sm">
             {permohonan.status_permohonan ?? "–"}
           </p>
-          <p className="text-xs text-navy-500 mt-1">Status diisi otomatis menurut tahapan data.</p>
+          <p className="text-xs text-slate-500 mt-1">Status diisi otomatis menurut tahapan data.</p>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
-    </Card>
+    </section>
   );
 }

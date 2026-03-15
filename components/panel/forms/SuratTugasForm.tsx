@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { SuratTugasPemberitahuan } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 
 interface SuratTugasFormProps {
   permohonanId: string;
@@ -57,33 +57,32 @@ export function SuratTugasForm({ permohonanId, onSaved }: SuratTugasFormProps) {
   if (loading) return null;
 
   return (
-    <Card title="Surat Tugas & Pemberitahuan">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Surat Tugas & Pemberitahuan</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">No. Surat Tugas</label>
-            <input name="no_surat_tugas" defaultValue={row?.no_surat_tugas ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>No. Surat Tugas</label>
+            <input name="no_surat_tugas" defaultValue={row?.no_surat_tugas ?? ""} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Surat Tugas</label>
-            <input type="date" name="tanggal_surat_tugas" defaultValue={row?.tanggal_surat_tugas?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm text-navy-600 mb-1">No. Surat Pemberitahuan</label>
-            <input name="no_surat_pemberitahuan" defaultValue={row?.no_surat_pemberitahuan ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Surat Tugas</label>
+            <input type="date" name="tanggal_surat_tugas" defaultValue={row?.tanggal_surat_tugas?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Surat Pemberitahuan</label>
-            <input type="date" name="tanggal_surat_pemberitahuan" defaultValue={row?.tanggal_surat_pemberitahuan?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>No. Surat Pemberitahuan</label>
+            <input name="no_surat_pemberitahuan" defaultValue={row?.no_surat_pemberitahuan ?? ""} className={FORM_INPUT} />
+          </div>
+          <div>
+            <label className={FORM_LABEL}>Tanggal Surat Pemberitahuan</label>
+            <input type="date" name="tanggal_surat_pemberitahuan" defaultValue={row?.tanggal_surat_pemberitahuan?.slice(0, 10)} className={FORM_INPUT} />
           </div>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
-    </Card>
+    </section>
   );
 }

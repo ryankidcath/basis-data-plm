@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Pengukuran, Surveyor, SuratTugasPemberitahuan, JenisLisensi } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 
 const JENIS_LISENSI: JenisLisensi[] = ["surveyor kadaster", "asisten surveyor kadaster"];
 const JENIS_LISENSI_LABELS: Record<JenisLisensi, string> = {
@@ -122,65 +122,67 @@ export function PengukuranForm({ permohonanId, onSaved, refreshCount = 0 }: Peng
   if (loading) return null;
   if (!stp) {
     return (
-      <Card title="Pengukuran">
-        <p className="text-sm text-navy-500">Isi Surat Tugas & Pemberitahuan terlebih dahulu.</p>
-      </Card>
+      <section className={FORM_SECTION}>
+        <h3 className={FORM_SECTION_HEADING}>Pengukuran</h3>
+        <p className="text-sm text-slate-500">Isi Surat Tugas & Pemberitahuan terlebih dahulu.</p>
+      </section>
     );
   }
 
   return (
-    <Card title="Pengukuran">
-      <form onSubmit={handleAdd} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Pengukuran</h3>
+      <form onSubmit={handleAdd} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Surveyor Berlisensi</label>
-            <select value={surveyorId} onChange={(e) => setSurveyorId(e.target.value)} required className="w-full px-3 py-2 border border-navy-300 rounded">
+            <label className={FORM_LABEL}>Surveyor Berlisensi</label>
+            <select value={surveyorId} onChange={(e) => setSurveyorId(e.target.value)} required className={FORM_INPUT}>
               <option value="">– Pilih –</option>
               {surveyorList.map((s) => (
                 <option key={s.id} value={s.id}>{s.nama}</option>
               ))}
             </select>
             {!showAddSurveyor ? (
-              <button type="button" onClick={() => setShowAddSurveyor(true)} className="mt-1 text-sm text-gold-600 hover:text-gold-700">
+              <button type="button" onClick={() => setShowAddSurveyor(true)} className="mt-1 text-sm text-indigo-600 hover:text-indigo-700">
                 + Tambah surveyor baru
               </button>
             ) : (
-              <div className="mt-3 p-3 border border-navy-200 rounded bg-navy-50/50 space-y-2">
+              <div className="mt-3 p-3 border border-slate-200 rounded-lg bg-slate-50/50 space-y-2">
                 {inlineError && <p className="text-sm text-red-600">{inlineError}</p>}
                 <div>
-                  <label className="block text-xs text-navy-600 mb-0.5">Nama *</label>
-                  <input value={inlineNama} onChange={(e) => setInlineNama(e.target.value)} className="w-full px-2 py-1.5 border border-navy-300 rounded text-sm" />
+                  <label className={FORM_LABEL}>Nama *</label>
+                  <input value={inlineNama} onChange={(e) => setInlineNama(e.target.value)} className={FORM_INPUT} />
                 </div>
                 <div>
-                  <label className="block text-xs text-navy-600 mb-0.5">No. Lisensi *</label>
-                  <input value={inlineNoLisensi} onChange={(e) => setInlineNoLisensi(e.target.value)} className="w-full px-2 py-1.5 border border-navy-300 rounded text-sm" />
+                  <label className={FORM_LABEL}>No. Lisensi *</label>
+                  <input value={inlineNoLisensi} onChange={(e) => setInlineNoLisensi(e.target.value)} className={FORM_INPUT} />
                 </div>
                 <div>
-                  <label className="block text-xs text-navy-600 mb-0.5">Jenis Lisensi</label>
-                  <select value={inlineJenisLisensi} onChange={(e) => setInlineJenisLisensi(e.target.value as JenisLisensi)} className="w-full px-2 py-1.5 border border-navy-300 rounded text-sm">
+                  <label className={FORM_LABEL}>Jenis Lisensi</label>
+                  <select value={inlineJenisLisensi} onChange={(e) => setInlineJenisLisensi(e.target.value as JenisLisensi)} className={FORM_INPUT}>
                     {JENIS_LISENSI.map((v) => (
                       <option key={v} value={v}>{JENIS_LISENSI_LABELS[v]}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-navy-600 mb-0.5">No. HP</label>
-                  <input value={inlineNoHp} onChange={(e) => setInlineNoHp(e.target.value)} className="w-full px-2 py-1.5 border border-navy-300 rounded text-sm" />
+                  <label className={FORM_LABEL}>No. HP</label>
+                  <input value={inlineNoHp} onChange={(e) => setInlineNoHp(e.target.value)} className={FORM_INPUT} />
                 </div>
                 <div>
-                  <label className="block text-xs text-navy-600 mb-0.5">NIK</label>
-                  <input value={inlineNik} onChange={(e) => setInlineNik(e.target.value)} className="w-full px-2 py-1.5 border border-navy-300 rounded text-sm" />
+                  <label className={FORM_LABEL}>NIK</label>
+                  <input value={inlineNik} onChange={(e) => setInlineNik(e.target.value)} className={FORM_INPUT} />
                 </div>
                 <div>
-                  <label className="block text-xs text-navy-600 mb-0.5">Alamat</label>
-                  <input value={inlineAlamat} onChange={(e) => setInlineAlamat(e.target.value)} className="w-full px-2 py-1.5 border border-navy-300 rounded text-sm" />
+                  <label className={FORM_LABEL}>Alamat</label>
+                  <input value={inlineAlamat} onChange={(e) => setInlineAlamat(e.target.value)} className={FORM_INPUT} />
                 </div>
                 <div className="flex gap-2 pt-1">
-                  <button type="button" onClick={handleSaveNewSurveyor} disabled={inlineSaving || !inlineNama.trim() || !inlineNoLisensi.trim()} className="px-3 py-1.5 bg-navy-800 text-white rounded text-sm">
+                  <button type="button" onClick={handleSaveNewSurveyor} disabled={inlineSaving || !inlineNama.trim() || !inlineNoLisensi.trim()} className="px-3 py-2 bg-indigo-600 text-white rounded-lg text-sm hover:bg-indigo-700 disabled:opacity-60">
                     {inlineSaving ? "Menyimpan..." : "Simpan"}
                   </button>
-                  <button type="button" onClick={() => { setShowAddSurveyor(false); setInlineError(null); }} className="px-3 py-1.5 border border-navy-300 rounded text-sm">
+                  <button type="button" onClick={() => { setShowAddSurveyor(false); setInlineError(null); }} className="px-3 py-2 border border-slate-200 rounded-lg text-sm hover:bg-slate-50">
                     Batal
                   </button>
                 </div>
@@ -188,26 +190,26 @@ export function PengukuranForm({ permohonanId, onSaved, refreshCount = 0 }: Peng
             )}
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Pengukuran</label>
-            <input type="date" value={tanggalPengukuran} onChange={(e) => setTanggalPengukuran(e.target.value)} required className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Pengukuran</label>
+            <input type="date" value={tanggalPengukuran} onChange={(e) => setTanggalPengukuran(e.target.value)} required className={FORM_INPUT} />
           </div>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menambah..." : "Tambah Pengukuran"}
         </button>
       </form>
       {pengukuranList.length > 0 && (
         <ul className="mt-4 space-y-2 text-sm">
           {pengukuranList.map((p) => (
-            <li key={p.id} className="flex justify-between items-center py-2 border-b border-navy-100">
+            <li key={p.id} className="flex justify-between items-center py-2 border-b border-slate-100">
               <span>{p.surveyor?.nama ?? p.surveyor_id} — {p.tanggal_pengukuran?.slice(0, 10)}</span>
-              <button type="button" onClick={() => handleDelete(p.id)} className="text-red-600 hover:underline text-xs">
+              <button type="button" onClick={() => handleDelete(p.id)} className="text-slate-500 hover:text-red-600 text-xs">
                 Hapus
               </button>
             </li>
           ))}
         </ul>
       )}
-    </Card>
+    </section>
   );
 }

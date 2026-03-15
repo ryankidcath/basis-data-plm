@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -31,25 +32,28 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-navy-950 px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl border border-navy-200 p-8">
-          <div className="text-center mb-8">
-            <Image
-              src="/logo.png"
-              alt="Logo KJSB Benning dan Rekan"
-              width={120}
-              height={120}
-              className="mx-auto mb-4"
-            />
-            <h1 className="text-2xl font-serif font-semibold text-navy-900 tracking-tight">
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
+      <div className="w-full max-w-lg">
+        <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 p-12 md:p-16">
+          <div className="mb-8">
+            <div className="inline-flex items-center justify-center bg-red-50 p-3 rounded-2xl mb-6">
+              <Image
+                src="/logo.png"
+                alt="Logo KJSB Benning dan Rekan"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
+            </div>
+            <h1 className="text-3xl font-extrabold text-slate-950 tracking-tight font-sans">
               KJSB Benning dan Rekan
             </h1>
-            <p className="text-navy-600 mt-1 text-sm">
-              Permohonan Langsung Masyarakat
+            <p className="text-lg font-medium text-slate-600 mt-4">
+              Selamat datang kembali. Silakan masuk untuk mengakses sistem.
             </p>
           </div>
-          <form onSubmit={handleSubmit} className="space-y-5">
+
+          <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
               <div
                 className="p-3 rounded-lg bg-red-50 text-red-700 text-sm"
@@ -58,10 +62,11 @@ export default function LoginPage() {
                 {error}
               </div>
             )}
-            <div>
+
+            <div className="space-y-2">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-navy-700 mb-1"
+                className="block text-sm font-medium text-slate-700"
               >
                 Email
               </label>
@@ -71,30 +76,40 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 rounded-lg border border-navy-300 focus:ring-2 focus:ring-gold-400 focus:border-gold-500 text-navy-900"
+                className="w-full bg-white border border-slate-200 px-4 py-3 rounded-lg focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all outline-none text-slate-900 placeholder:text-slate-400"
                 placeholder="admin@example.com"
               />
             </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-navy-700 mb-1"
-              >
-                Kata sandi
-              </label>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-slate-700"
+                >
+                  Kata sandi
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-indigo-600 hover:text-indigo-700 transition-colors"
+                >
+                  Lupa kata sandi?
+                </Link>
+              </div>
               <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 rounded-lg border border-navy-300 focus:ring-2 focus:ring-gold-400 focus:border-gold-500 text-navy-900"
+                className="w-full bg-white border border-slate-200 px-4 py-3 rounded-lg focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all outline-none text-slate-900 placeholder:text-slate-400"
               />
             </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-lg bg-navy-800 text-white font-medium hover:bg-navy-900 focus:ring-2 focus:ring-gold-400 disabled:opacity-60 transition-colors"
+              className="w-full py-3.5 px-4 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold focus:ring-4 focus:ring-indigo-100 focus:outline-none disabled:opacity-60 transition-all"
             >
               {loading ? "Memproses..." : "Masuk"}
             </button>

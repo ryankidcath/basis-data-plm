@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { Permohonan, Klien } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 
 interface KlienFormProps {
   permohonanId: string;
@@ -52,28 +52,32 @@ export function KlienForm({ permohonanId, onSaved }: KlienFormProps) {
   if (loading) return null;
   if (!permohonan?.klien_id || !klien) {
     return (
-      <Card title="Klien">
-        <p className="text-sm text-navy-500">Pilih klien di form Permohonan jika ada.</p>
-      </Card>
+      <section className={FORM_SECTION}>
+        <h3 className={FORM_SECTION_HEADING}>Klien</h3>
+        <p className="text-sm text-slate-500">Pilih klien di form Permohonan jika ada.</p>
+      </section>
     );
   }
 
   return (
-    <Card title="Klien">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Klien</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div>
-          <label className="block text-sm text-navy-600 mb-1">Nama</label>
-          <input name="nama" defaultValue={klien.nama} required className="w-full px-3 py-2 border border-navy-300 rounded" />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={FORM_LABEL}>Nama</label>
+            <input name="nama" defaultValue={klien.nama} required className={FORM_INPUT} />
+          </div>
+          <div>
+            <label className={FORM_LABEL}>No. HP</label>
+            <input name="no_hp" defaultValue={klien.no_hp ?? ""} className={FORM_INPUT} />
+          </div>
         </div>
-        <div>
-          <label className="block text-sm text-navy-600 mb-1">No. HP</label>
-          <input name="no_hp" defaultValue={klien.no_hp ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
-        </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
-    </Card>
+    </section>
   );
 }

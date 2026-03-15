@@ -104,21 +104,21 @@ export function PermohonanSearchCombobox({
         }}
         onFocus={() => setIsOpen(true)}
         placeholder={placeholder}
-        className="w-full px-3 py-2 border border-navy-300 rounded-lg text-sm focus:ring-2 focus:ring-gold-500/50 focus:border-gold-500"
+        className="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500"
         autoComplete="off"
       />
       {isOpen && (
-        <div className="absolute z-10 top-full left-0 right-0 mt-1 py-1 bg-white border border-navy-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-10 top-full left-0 right-0 mt-1 py-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {searchLoading ? (
-            <div className="px-3 py-4 text-sm text-navy-500 text-center">
+            <div className="px-3 py-4 text-sm text-slate-500 text-center">
               Mencari...
             </div>
           ) : searchQuery.trim() === "" ? (
-            <div className="px-3 py-4 text-sm text-navy-500 text-center">
+            <div className="px-3 py-4 text-sm text-slate-500 text-center">
               Ketik untuk cari...
             </div>
           ) : searchResults.length === 0 ? (
-            <div className="px-3 py-4 text-sm text-navy-500 text-center">
+            <div className="px-3 py-4 text-sm text-slate-500 text-center">
               Tidak ada hasil
             </div>
           ) : (
@@ -128,7 +128,7 @@ export function PermohonanSearchCombobox({
                   <button
                     type="button"
                     onClick={() => handleSelect(p)}
-                    className="w-full text-left px-3 py-2 text-sm text-navy-800 hover:bg-navy-100 focus:bg-navy-100 focus:outline-none"
+                    className="w-full text-left px-3 py-2 text-sm text-slate-800 hover:bg-slate-100 focus:bg-slate-100 focus:outline-none"
                   >
                     {p.kode_kjsb}
                   </button>

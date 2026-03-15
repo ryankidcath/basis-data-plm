@@ -41,11 +41,10 @@ export default function PdfUpload({ permohonanId, onSaved, embedded = false }: P
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
-  const wrapperClass = embedded ? "pb-4" : "rounded-lg border border-navy-200 bg-white p-4";
+  const wrapperClass = embedded ? "pb-4" : "rounded-lg border border-slate-200 bg-white p-4";
   return (
     <div className={wrapperClass}>
-      <h3 className="text-sm font-medium text-navy-800 mb-2">Upload PDF Hasil Scan</h3>
-      <p className="text-xs text-navy-500 mb-3">
+      <p className="text-xs text-slate-500 mb-3">
         Upload file PDF hasil scan. File akan dikirim ke Discord channel #berkas-plm. Maksimal 25MB.
       </p>
       {error && <p className="text-sm text-red-600 mb-2">{error}</p>}
@@ -56,7 +55,7 @@ export default function PdfUpload({ permohonanId, onSaved, embedded = false }: P
         accept=".pdf,application/pdf"
         onChange={handleFile}
         disabled={uploading}
-        className="block w-full text-sm text-navy-600 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-navy-100 file:text-navy-800 file:font-medium"
+        className="block w-full text-sm text-slate-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-slate-100 file:text-slate-800 file:font-medium"
       />
       {uploading && <p className="mt-2 text-xs text-navy-500">Mengunggah...</p>}
     </div>

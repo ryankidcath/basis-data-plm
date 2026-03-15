@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { updateStatusPermohonan } from "@/lib/status-permohonan";
 import type { LegalisasiGu } from "@/lib/types";
 import type { PenggunaanTanah2 } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { FORM_LABEL, FORM_INPUT, FORM_SECTION, FORM_SECTION_HEADING, FORM_BUTTON } from "@/lib/formStyles";
 import { FormattedIntegerInput } from "@/components/ui/FormattedIntegerInput";
 import { PENGGUNAAN_TANAH_2_LABELS } from "@/lib/format";
 
@@ -66,25 +66,26 @@ export function LegalisasiGuForm({ permohonanId, onSaved }: LegalisasiGuFormProp
   if (loading) return null;
 
   return (
-    <Card title="Legalisasi GU">
-      <form onSubmit={handleSubmit} className="space-y-3">
+    <section className={FORM_SECTION}>
+      <h3 className={FORM_SECTION_HEADING}>Legalisasi GU</h3>
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && <p className="text-sm text-red-600">{error}</p>}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-navy-600 mb-1">No. Berkas</label>
-            <input name="no_berkas" defaultValue={row?.no_berkas ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>No. Berkas</label>
+            <input name="no_berkas" defaultValue={row?.no_berkas ?? ""} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Berkas</label>
-            <input type="date" name="tanggal_berkas" defaultValue={row?.tanggal_berkas?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Berkas</label>
+            <input type="date" name="tanggal_berkas" defaultValue={row?.tanggal_berkas?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Luas Hasil Ukur (m²)</label>
-            <FormattedIntegerInput name="luas_hasil_ukur" defaultValue={row?.luas_hasil_ukur ?? ""} optional className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Luas Hasil Ukur (m²)</label>
+            <FormattedIntegerInput name="luas_hasil_ukur" defaultValue={row?.luas_hasil_ukur ?? ""} optional className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Penggunaan Tanah</label>
-            <select name="penggunaan_tanah_2" defaultValue={row?.penggunaan_tanah_2 ?? ""} className="w-full px-3 py-2 border border-navy-300 rounded">
+            <label className={FORM_LABEL}>Penggunaan Tanah</label>
+            <select name="penggunaan_tanah_2" defaultValue={row?.penggunaan_tanah_2 ?? ""} className={FORM_INPUT}>
               <option value="">–</option>
               {PENGGUNAAN_TANAH_2.map((v) => (
                 <option key={v} value={v}>{PENGGUNAAN_TANAH_2_LABELS[v] ?? v}</option>
@@ -92,22 +93,22 @@ export function LegalisasiGuForm({ permohonanId, onSaved }: LegalisasiGuFormProp
             </select>
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal SPS</label>
-            <input type="date" name="tanggal_sps" defaultValue={row?.tanggal_sps?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal SPS</label>
+            <input type="date" name="tanggal_sps" defaultValue={row?.tanggal_sps?.slice(0, 10)} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Biaya</label>
-            <FormattedIntegerInput name="biaya" defaultValue={row?.biaya ?? 0} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Biaya</label>
+            <FormattedIntegerInput name="biaya" defaultValue={row?.biaya ?? 0} className={FORM_INPUT} />
           </div>
           <div>
-            <label className="block text-sm text-navy-600 mb-1">Tanggal Bayar SPS</label>
-            <input type="date" name="tanggal_bayar_sps" defaultValue={row?.tanggal_bayar_sps?.slice(0, 10)} className="w-full px-3 py-2 border border-navy-300 rounded" />
+            <label className={FORM_LABEL}>Tanggal Bayar SPS</label>
+            <input type="date" name="tanggal_bayar_sps" defaultValue={row?.tanggal_bayar_sps?.slice(0, 10)} className={FORM_INPUT} />
           </div>
         </div>
-        <button type="submit" disabled={saving} className="px-4 py-2 bg-navy-800 text-white rounded hover:bg-navy-900 disabled:opacity-60 text-sm">
+        <button type="submit" disabled={saving} className={FORM_BUTTON}>
           {saving ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
-    </Card>
+    </section>
   );
 }
