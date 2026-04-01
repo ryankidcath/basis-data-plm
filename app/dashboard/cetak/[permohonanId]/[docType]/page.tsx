@@ -89,12 +89,12 @@ export default function CetakPage() {
 
   if (!permohonanId || !docType) {
     return (
-      <div className="min-h-screen bg-navy-50 p-6">
+      <div className="min-h-screen bg-slate-50 p-6">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow p-6">
-          <p className="text-navy-700 mb-4">Dokumen tidak valid.</p>
+          <p className="text-slate-700 mb-4">Dokumen tidak valid.</p>
           <Link
             href="/dashboard"
-            className="text-gold-600 hover:text-gold-700 font-medium"
+            className="text-red-600 hover:text-red-700 font-medium"
           >
             Kembali ke Dashboard
           </Link>
@@ -105,20 +105,20 @@ export default function CetakPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-navy-50 p-6 flex items-center justify-center">
-        <p className="text-navy-600">Memuat...</p>
+      <div className="min-h-screen bg-slate-50 p-6 flex items-center justify-center">
+        <p className="text-slate-600">Memuat...</p>
       </div>
     );
   }
 
   if (!detail) {
     return (
-      <div className="min-h-screen bg-navy-50 p-6">
+      <div className="min-h-screen bg-slate-50 p-6">
         <div className="max-w-md mx-auto bg-white rounded-lg shadow p-6">
-          <p className="text-navy-700 mb-4">Permohonan tidak ditemukan.</p>
+          <p className="text-slate-700 mb-4">Permohonan tidak ditemukan.</p>
           <Link
             href="/dashboard"
-            className="text-gold-600 hover:text-gold-700 font-medium"
+            className="text-red-600 hover:text-red-700 font-medium"
           >
             Kembali ke Dashboard
           </Link>
@@ -151,7 +151,7 @@ export default function CetakPage() {
   const isGu = docType === "gambar_hasil_ukur";
 
   return (
-    <div className="min-h-screen bg-navy-50">
+    <div className="min-h-screen bg-slate-50">
       <style
         dangerouslySetInnerHTML={{
           __html: isGu
@@ -159,21 +159,21 @@ export default function CetakPage() {
             : "@media print { @page { size: A3; } }",
         }}
       />
-      <div className="no-print sticky top-0 z-10 bg-white border-b border-navy-200 px-4 py-3 flex items-center justify-between shadow-sm">
-        <span className="text-sm text-navy-600">
+      <div className="no-print motion-enter sticky top-0 z-10 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm motion-reduce:animate-none">
+        <span className="text-sm text-slate-600">
           {DOC_LABELS[docType]} – {detail.kode_kjsb}
         </span>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => window.print()}
-            className="px-4 py-2 bg-navy-800 text-white text-sm font-medium rounded-lg hover:bg-navy-900"
+            className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg transition-colors hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
           >
             Cetak
           </button>
           <Link
             href="/dashboard"
-            className="px-4 py-2 text-navy-700 text-sm font-medium rounded-lg border border-navy-300 hover:bg-navy-50"
+            className="px-4 py-2 text-slate-700 text-sm font-medium rounded-lg border border-slate-300 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
           >
             Kembali ke Dashboard
           </Link>

@@ -15,6 +15,22 @@ body {
   font-feature-settings: "kern" 1;
 }
 
+/* Subtle motion system for app surfaces */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.motion-enter {
+  animation: fade-in-up 420ms ease-out both;
+}
+
 /* Focus ring for accessibility */
 input:focus-visible,
 select:focus-visible,
@@ -60,5 +76,17 @@ button:focus-visible {
 @media print {
   .no-print {
     display: none !important;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
   }
 }

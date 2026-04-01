@@ -154,7 +154,7 @@ export default function DashboardPage() {
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden bg-slate-100">
       {/* Navbar: sama dengan Dashboard Status */}
-      <header className="flex-shrink-0 h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shadow-sm">
+      <header className="motion-enter flex-shrink-0 h-14 bg-white border-b border-slate-100 flex items-center justify-between px-6 shadow-sm motion-reduce:animate-none">
         <div className="flex items-center gap-3">
           <Image src="/logo.png" alt="Logo" width={36} height={36} className="object-contain rounded-sm" />
           <h1 className="text-lg font-semibold tracking-tight text-slate-900">
@@ -164,25 +164,25 @@ export default function DashboardPage() {
         <div className="flex items-center gap-1">
           <Link
             href="/dashboard/status"
-            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
           >
             Dashboard
           </Link>
-          <span className="text-indigo-600 text-sm font-medium px-3 py-2 rounded-lg bg-indigo-50">
+          <span className="text-red-600 text-sm font-medium px-3 py-2 rounded-lg bg-red-50">
             Peta
           </span>
           <a
             href="/api/export/permohonan?format=csv"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
           >
             Ekspor data
           </a>
           <button
             type="button"
             onClick={handleSignOut}
-            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-600 hover:text-slate-900 text-sm font-medium px-3 py-2 rounded-lg hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300"
           >
             Keluar
           </button>
