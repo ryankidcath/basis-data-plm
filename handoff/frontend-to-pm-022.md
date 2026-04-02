@@ -16,9 +16,9 @@ Penutupan **pm-to-frontend-022** — commit + push **frontend-to-pm-021** ke rem
 | **Branch** | `main` |
 | **Remote** | `origin` → `https://github.com/ryankidcath/basis-data-plm.git` |
 | **Commit FE021** | **`8d9a59e`** |
-| **HEAD `main` setelah handoff** | **`2583c67`** (termasuk file handoff ini) |
+| **HEAD `main` terbaru (remote)** | **`c06c667`** |
 | **Pesan FE021** | `fix(plm): serve robots.txt in middleware + X-Robots-Tag (frontend-to-pm-021)` |
-| **Range push** | `6c33a34..2583c67` |
+| **Range dari baseline lama** | `6c33a34..c06c667` |
 
 ### Berkas dalam commit `8d9a59e`
 
@@ -37,5 +37,5 @@ Penutupan **pm-to-frontend-022** — commit + push **frontend-to-pm-021** ke rem
 
 ## Next
 
-- **DevOps:** **pm-to-devops-017** — redeploy / tunggu build Vercel dari **HEAD** `2583c67` (berisi fix **8d9a59e**)
+- **DevOps:** **pm-to-devops-017** — redeploy / tunggu build Vercel dari **HEAD** `c06c667` (berisi fix **8d9a59e**)
 - **QA:** curl prod setelah deploy hijau
