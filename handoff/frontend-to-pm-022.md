@@ -15,10 +15,13 @@ Penutupan **pm-to-frontend-022** — commit + push **frontend-to-pm-021** ke rem
 |------|--------|
 | **Branch** | `main` |
 | **Remote** | `origin` → `https://github.com/ryankidcath/basis-data-plm.git` |
-| **Commit FE021** | **`8d9a59e`** |
-| **HEAD `main` terbaru (remote)** | **`c06c667`** |
-| **Pesan FE021** | `fix(plm): serve robots.txt in middleware + X-Robots-Tag (frontend-to-pm-021)` |
-| **Range dari baseline lama** | `6c33a34..c06c667` |
+| **Commit yang membawa kode FE021** | **`8d9a59e`** |
+| **Pesan** | `fix(plm): serve robots.txt in middleware + X-Robots-Tag (frontend-to-pm-021)` |
+| **Baseline sebelumnya (referensi PM)** | `6c33a34` |
+
+Verifikasi cepat: `git fetch origin && git merge-base --is-ancestor 8d9a59e origin/main` → harus **exit 0**.
+
+**Tip `origin/main`** bisa bertambah dengan commit dokumen lanjutan; yang penting untuk Vercel: **tree berisi `8d9a59e`** (middleware short-circuit `/robots.txt`).
 
 ### Berkas dalam commit `8d9a59e`
 
@@ -37,5 +40,5 @@ Penutupan **pm-to-frontend-022** — commit + push **frontend-to-pm-021** ke rem
 
 ## Next
 
-- **DevOps:** **pm-to-devops-017** — redeploy / tunggu build Vercel dari **HEAD** `c06c667` (berisi fix **8d9a59e**)
+- **DevOps:** **pm-to-devops-017** — pastikan production build dari **`origin/main`** yang sudah ber-ancestor **`8d9a59e`**
 - **QA:** curl prod setelah deploy hijau
